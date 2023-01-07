@@ -1,5 +1,7 @@
-import React from "react";
+import Comments from "../components/Detail/Comments";
 
 export default function CommunityDetail() {
-  return <div>CommunityDetail</div>;
+  return (
+    <Comments />
+  )
 }
