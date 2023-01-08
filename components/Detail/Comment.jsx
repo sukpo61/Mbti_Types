@@ -4,19 +4,18 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "../../firebase";
+import MbtiColorBtn from "../common/MbtiColorBtn";
 
 export default function Comment ({comment}) {
 
   const [toggle, setToggle] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
-  const editInputRef = useRef();
+  const editInputRef = useRef(null);
 
   const setEdit = () => {
     setIsEdit(!isEdit); 
     setToggle(!toggle);
-    //FIXME: 왜 안됨??
-    // editInputRef.current.focus();
   };
 
   const editComment = async (id) => {
@@ -34,18 +33,25 @@ export default function Comment ({comment}) {
       style: "destructive",
       onPress: () => {
         deleteDoc(doc(dbService, "communityComments", id))
-      }
-      }
+      }}
     ])
   };
+
+  // const stringDate = (date) => {
+  //   const year = date.getFullYear();
+  //   const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  //   const day = ("0" + date.getDate()).slice(-2);
+  //   console.log(year, month, day)
+  // };
+  // {new Date(comment.date).toLocaleDateString("kr")}
 
 
   return (
       <CommentBox>
           <NameDateMbtiBox>
-              <MbtiBtn><Mbti>{comment.mbti}</Mbti></MbtiBtn>
+              <MbtiColorBtn mbti={comment.mbti} />
               <Name>{comment.nickname}</Name>
-              <Date>2023/01/04</Date>
+              <Date>2023/02/03</Date>
               <ToggleBtn onPress={() => setToggle(!toggle)}>
                   <MaterialCommunityIcons name="dots-vertical" size={22} color="gray" />
               </ToggleBtn>
@@ -61,11 +67,12 @@ export default function Comment ({comment}) {
               }
           </NameDateMbtiBox>
           {isEdit 
-          ? <EditInput onSubmitEditing={() => editComment(comment.id)} value={editContent} onChangeText={setEditContent} defaultValue={comment.content} ref={editInputRef} /> 
+          ? <EditInput autoFocus onSubmitEditing={() => editComment(comment.id)} onChangeText={setEditContent} defaultValue={comment.content} /> 
           : <CommentText>{comment.content}</CommentText>}
       </CommentBox>
   )
 };
+
 
 const CommentBox = styled.View`
   margin-bottom: 20px;
@@ -100,23 +107,6 @@ const EditInput = styled.TextInput`
   font-size: 20px;
   padding: 0 10px;
   margin: 0 5px;
-
-`
-
-const MbtiBtn = styled.View`
-  height: 23PX;
-  width: 65px;
-  background-color: #FFD772;
-  border-radius: 20px;
-  margin-right: 5px;
-`
-
-const Mbti = styled.Text`
-  color: white;
-  text-align: center;
-  font-size: 20px;
-  font-weight: bold;
-  padding-left: 4px;
 `
 
 const ToggleBtn = styled.TouchableOpacity`
@@ -127,7 +117,6 @@ const ToggleBtn = styled.TouchableOpacity`
 const ToggleBox = styled.View`
   height: 65px;
   width: 100px;
-  /* border: 1px solid lightgray; */
   border-radius: 5px;
   justify-content: center;
   align-items: center;

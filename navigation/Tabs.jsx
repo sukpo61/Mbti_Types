@@ -15,11 +15,14 @@ export default function Tabs() {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
+      sceneContainerStyle={{backgroundColor: "white"}}
       screenOptions={{
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "below-icon",
         headerTitle: "",
+      
+        // tabBarStyle: {backgroundColor: "#ffacff"}
       }}
     >
       <Tab.Screen

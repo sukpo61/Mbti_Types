@@ -41,7 +41,6 @@ export default function CommentsList () {
         }
 
         await addDoc(collection(dbService, "communityComments"), newCommnet);
-        console.log("댓글 추가 성공")
         setContent("");
     };
 
@@ -80,7 +79,7 @@ const Line = styled.View`
 
 const CommentsContainer = styled.View`
   width: 95%;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `
 
 const CommentsCount = styled.Text`
@@ -102,7 +101,7 @@ const CommentInput = styled.TextInput`
   border-radius: 20px;
   height: 40px;
   width: 85%;
-  font-size: 20px;
-  padding: 0 20px;
+  font-size: 19px;
+  padding: 5px 20px;
   background-color: #f1f3f5;
 `
