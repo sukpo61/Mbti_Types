@@ -10,14 +10,13 @@ import { emailRegex, pwRegex, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils";
 import { useColorScheme, Modal } from "react-native";
 import AuthModal from "../components/Auth/AuthModal";
 
-const View = styled.View`
+const ScrollView = styled.ScrollView`
   height: ${SCREEN_HEIGHT + "px"};
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: center;
   background-color: white;
-  padding: 0 32px 96px 32px;
+  padding: 48px 32px 32px 32px;
 `;
 
 const Text = styled.Text``;
@@ -47,7 +46,7 @@ const ButtonsWrap = styled.View`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  margin-top: auto;
+  margin-top: 144px;
 `;
 
 const LoginText = styled.Text`
@@ -86,10 +85,9 @@ const MBTIInput = styled.TouchableOpacity`
 
 const TitleWrap = styled.View`
   height: 112px;
-  width: ${SCREEN_WIDTH + "px"};
+  width: 100%;
   padding: 40px 32px;
   background-color: #efe8fa;
-  margin-bottom: 48px;
 `;
 
 const TitleText = styled.Text`
@@ -108,7 +106,7 @@ export default function SignUp({
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [nick, setNick] = useState("");
-  const [mbti, setMBTI] = useState("select your MBTI");
+  const [mbti, setMBTI] = useState("Select your MBTI");
   const isDark = useColorScheme() === "dark";
   const [displayed, setDisplayed] = useState(false);
 
@@ -196,10 +194,10 @@ export default function SignUp({
 
   return (
     <>
-      <View>
-        <TitleWrap>
-          <TitleText>Sign up</TitleText>
-        </TitleWrap>
+      <TitleWrap>
+        <TitleText>Sign up</TitleText>
+      </TitleWrap>
+      <ScrollView>
         <EmailInput
           ref={emailRef}
           value={email}
@@ -248,7 +246,7 @@ export default function SignUp({
             <RegisterText>Submmit</RegisterText>
           </RegisterButton>
         </ButtonsWrap>
-      </View>
+      </ScrollView>
       <AuthModal
         SetDisplayed={setDisplayed}
         Displayed={displayed}
