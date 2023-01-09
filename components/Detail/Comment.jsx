@@ -5,19 +5,21 @@ import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "../../firebase";
 import MbtiColorBtn from "../common/MbtiColorBtn";
+import { getDate } from "../../utils";
 
 export default function Comment ({comment}) {
 
   const [toggle, setToggle] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
-  const editInputRef = useRef(null);
 
+  // [댓글 수정] 클릭했을 때 text를 input으로 변환함.
   const setEdit = () => {
     setIsEdit(!isEdit); 
     setToggle(!toggle);
   };
 
+  // 댓글 수정하기.
   const editComment = async (id) => {
     await updateDoc(doc(dbService, "communityComments", id), {
       content: editContent
@@ -25,6 +27,7 @@ export default function Comment ({comment}) {
     setIsEdit(false); 
   };
 
+  // 댓글 삭제하기
   const deleteComment = async (id) => {
     Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
       {text: "취소",
@@ -37,6 +40,7 @@ export default function Comment ({comment}) {
     ])
   };
 
+  
   // const stringDate = (date) => {
   //   const year = date.getFullYear();
   //   const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -51,9 +55,10 @@ export default function Comment ({comment}) {
           <NameDateMbtiBox>
               <MbtiColorBtn mbti={comment.mbti} />
               <Name>{comment.nickname}</Name>
-              <Date>2023/02/03</Date>
+              <Date>{getDate(comment.date)}</Date>
+              {/* <Date>{`${comment.date.slice(0,4)}/${comment.date.slice(4,6)}/${comment.date.slice(6,8)}`}</Date> */}
               <ToggleBtn onPress={() => setToggle(!toggle)}>
-                  <MaterialCommunityIcons name="dots-vertical" size={22} color="gray" />
+                  <MaterialCommunityIcons name="dots-vertical" size={23} color="gray" />
               </ToggleBtn>
               {toggle &&
                   <ToggleBox>
@@ -125,6 +130,7 @@ const ToggleBox = styled.View`
   top: 25px;
   z-index: 1;
   background-color: white;
+  border: 0.5px solid lightgray;
 `
 
 const ToggleText = styled.Text`

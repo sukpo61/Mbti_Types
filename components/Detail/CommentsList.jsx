@@ -1,44 +1,82 @@
 import styled from "@emotion/native";
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, RefreshControl, Text, TouchableOpacity } from "react-native";
 import { Entypo } from '@expo/vector-icons'; 
 import { useEffect, useState } from "react";
 import { dbService } from "../../firebase";
-import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
 import Comment from "./Comment";
+import { useQuery, useQueryClient } from "react-query";
+import { postTime } from "../../utils";
 
 export default function CommentsList () {
 
-    const [comments, setComments] = useState([]);
+    const queryClient = useQueryClient();
+    // const [comments, setComments] = useState(["hello"]);
     const [content, setContent] = useState("");
+    const [isRefreshing, setIsRefreshing] = useState(false);
+
+    const { dateString } = postTime();
 
     useEffect(() => {
         getComments();
     }, []);
 
+    // 댓글 데이터 불러오기.
     const getComments = async () => {
-        const q = query(
-            collection(dbService, "communityComments"),
-            orderBy("date", "desc")
-        );
+      const q = query(
+        collection(dbService, "communityComments"),
+        orderBy("date", "desc")
+      );
 
-        onSnapshot(q, (snapshot) => {
-            const newComments = snapshot.docs.map((doc) => ({
-                ...doc.data(),
-                id: doc.id
-            }))
-            setComments(newComments)
-        })
+      const array = [];
+      const querySnapshot = await getDocs(q)
+      querySnapshot.forEach((doc) => array.push({
+        id: doc.id,
+        ...doc.data()
+      }))
+      // setComments(array)
+      return array;
+
+      // const array = [];
+      // await onSnapshot(q, (snapshot) => {
+      //   snapshot.docs.map((doc) => (
+      //     array.push({
+      //     id: doc.id,
+      //     ...doc.data()
+      //   })))
+      //   setComments(array)
+      // })
+      // return array;
     };
 
+    const { data: comments, isLoading }  = useQuery("communityComments", getComments)
+    // console.log("data",comments)
+
+    // 새로고침하기
+    const onRefresh = async () => {
+      setIsRefreshing(true);
+      await queryClient.refetchQueries("communityComments");
+      setIsRefreshing(false);
+    };
+
+    if (isLoading || isRefreshing) {
+      return (
+        <Loader>
+          <ActivityIndicator size="large" />
+        </Loader>
+      )
+    }
+
+    // 댓글 추가하기.
     const addComment = async () => {
-        const newCommnet = {
-            postId: "1",
-            userId: "test@naver.com",
-            nickname: "겨울",
-            date: new Date(),
-            content,
-            mbti: "ISFP"
-        }
+      const newCommnet = {
+        postId: "1",
+        userId: "test@naver.com",
+        nickname: "겨울",
+        date: dateString,
+        content,
+        mbti: "ISFP"
+      }
 
         await addDoc(collection(dbService, "communityComments"), newCommnet);
         setContent("");
@@ -46,7 +84,15 @@ export default function CommentsList () {
 
     return (
       <>
-        <Wrap contentContainerStyle={{alignItems: "center"}}>
+        <Wrap 
+          contentContainerStyle={{alignItems: "center"}} 
+          refreshControl={
+            <RefreshControl 
+              refreshing={isRefreshing} 
+              onRefresh={onRefresh}
+            />
+          }    
+        >
           <Text>본문 들어가는 자리</Text>
           <Line />
           <CommentsContainer>
@@ -57,13 +103,19 @@ export default function CommentsList () {
           </CommentsContainer>
         </Wrap>
         <CommentAddContainer>
-          {/* <Entypo name="pencil" size={24} color="gray" style={{marginRight: 10}} /> */}
           <CommentInput value={content} onChangeText={setContent} onSubmitEditing={addComment} placeholder="댓글을 입력해주세요." />
+          {/* <Entypo name="pencil" size={24} color="gray" style={{marginRight: 10}} /> */}
         </CommentAddContainer>
       </>
     )
 
 };
+
+const Loader = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`
 
 const Wrap = styled.ScrollView`
   padding: 20px;

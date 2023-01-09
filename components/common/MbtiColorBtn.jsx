@@ -1,6 +1,7 @@
 import styled from "@emotion/native";
 import { useState } from "react";
 
+// props로 mbti 데이터를 넘겨받아야 함.
 export default function MbtiColorBtn ({mbti}) {
 
     let mbtiColor = "";

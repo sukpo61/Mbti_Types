@@ -21,8 +21,8 @@ export default function Tabs() {
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "below-icon",
         headerTitle: "",
-      
-        // tabBarStyle: {backgroundColor: "#ffacff"}
+        tabBarStyle: {backgroundColor: "#EFE8FA"},
+        headerStyle: {backgroundColor: "#EFE8FA"},
       }}
     >
       <Tab.Screen
