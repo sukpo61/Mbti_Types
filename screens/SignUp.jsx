@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { emailRegex, pwRegex, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils";
 import { useColorScheme, Modal } from "react-native";
+import AuthModal from "../components/Auth/AuthModal";
 
 const View = styled.View`
   height: ${SCREEN_HEIGHT + "px"};
@@ -97,48 +98,6 @@ const TitleText = styled.Text`
   color: #584164;
 `;
 
-const MBTIWrap = styled.View`
-  height: ${SCREEN_HEIGHT / 2.0 + "px"};
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: center;
-  background-color: #efe8fa;
-  padding: 0 32px 0 32px;
-  position: absolute;
-  bottom: 0;
-  border-radius: 28px 28px 0px 0px;
-`;
-const MBTI = styled.TouchableOpacity`
-  height: 32px;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: center;
-  ${Text} {
-    font-size: 14px;
-    color: #584164;
-  }
-`;
-const MBTIScrollWrap = styled.ScrollView`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background-color: #efe8fa;
-  margin-top: 32px;
-`;
-
-const BackBlur = styled.View`
-  width: 100%;
-  height: ${SCREEN_HEIGHT + "px"};
-  background-color: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  top: -80px;
-  left: 0;
-  z-index: 2;
-`;
-
 export default function SignUp({
   navigation: { goBack, setOptions, navigate, reset },
 }) {
@@ -150,35 +109,8 @@ export default function SignUp({
   const [pw, setPw] = useState("");
   const [nick, setNick] = useState("");
   const [mbti, setMBTI] = useState("select your MBTI");
-  const [displayed, setDisplayed] = useState(false);
   const isDark = useColorScheme() === "dark";
-
-  const auth = getAuth();
-
-  function MBTIContainer({ children }) {
-    const Text = styled.Text``;
-    const MBTI = styled.TouchableOpacity`
-      height: 32px;
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      align-items: center;
-      ${Text} {
-        font-size: 14px;
-        color: #584164;
-      }
-    `;
-    return (
-      <MBTI
-        onPress={() => {
-          setDisplayed(!displayed);
-          setMBTI(children);
-        }}
-      >
-        <Text>{children}</Text>
-      </MBTI>
-    );
-  }
+  const [displayed, setDisplayed] = useState(false);
 
   const validateInputs = () => {
     if (!email) {
@@ -317,30 +249,11 @@ export default function SignUp({
           </RegisterButton>
         </ButtonsWrap>
       </View>
-      {displayed && (
-        <BackBlur>
-          <MBTIWrap>
-            <MBTIScrollWrap>
-              <MBTIContainer>INTJ</MBTIContainer>
-              <MBTIContainer>INTP</MBTIContainer>
-              <MBTIContainer>ENTJ</MBTIContainer>
-              <MBTIContainer>ENTP</MBTIContainer>
-              <MBTIContainer>INFJ</MBTIContainer>
-              <MBTIContainer>INFP</MBTIContainer>
-              <MBTIContainer>ENFJ</MBTIContainer>
-              <MBTIContainer>ENFP</MBTIContainer>
-              <MBTIContainer>ISTJ</MBTIContainer>
-              <MBTIContainer>ISFJ</MBTIContainer>
-              <MBTIContainer>ESTJ</MBTIContainer>
-              <MBTIContainer>ESFJ</MBTIContainer>
-              <MBTIContainer>ISTP</MBTIContainer>
-              <MBTIContainer>ISFP</MBTIContainer>
-              <MBTIContainer>ESTP</MBTIContainer>
-              <MBTIContainer>ESFP</MBTIContainer>
-            </MBTIScrollWrap>
-          </MBTIWrap>
-        </BackBlur>
-      )}
+      <AuthModal
+        SetDisplayed={setDisplayed}
+        Displayed={displayed}
+        SetMBTI={setMBTI}
+      ></AuthModal>
     </>
   );
 }
