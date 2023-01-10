@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { emailRegex, pwRegex, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils";
 import { useColorScheme, Modal } from "react-native";
-import AuthModal from "../components/Auth/AuthModal";
+import MBTIModal from "../components/common/MBTIModal";
 
 const ScrollView = styled.ScrollView`
   height: ${SCREEN_HEIGHT + "px"};
@@ -97,7 +97,7 @@ const TitleText = styled.Text`
 `;
 
 export default function SignUp({
-  navigation: { goBack, setOptions, navigate, reset },
+  navigation: { setOptions, navigate, reset },
 }) {
   const emailRef = useRef(null);
   const pwRef = useRef(null);
@@ -106,9 +106,10 @@ export default function SignUp({
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState("");
   const [nick, setNick] = useState("");
-  const [mbti, setMBTI] = useState("Select your MBTI");
   const isDark = useColorScheme() === "dark";
+
   const [displayed, setDisplayed] = useState(false);
+  const [mbti, setMBTI] = useState("Select your MBTI");
 
   const validateInputs = () => {
     if (!email) {
@@ -225,6 +226,7 @@ export default function SignUp({
           returnKeyType="send"
           placeholder="Enter your Nickname"
         />
+
         <MBTIInput
           ref={MBTIRef}
           // value={pw}
