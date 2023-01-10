@@ -28,3 +28,5 @@ const Text = styled.Text`
 `;
 
 const LogoutBox = styled.View``;
+
+//마이페이지 start
