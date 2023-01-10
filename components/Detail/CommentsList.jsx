@@ -151,3 +151,5 @@ const CommentInput = styled.TextInput`
   padding: 5px 20px;
   background-color: #f1f3f5;
 `
+
+//좋아요
