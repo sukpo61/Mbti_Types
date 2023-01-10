@@ -67,10 +67,13 @@ export default function Add() {
         placeholder="제목"
       />
       <CommentAddInput
+        textAlignVertical="top"
         onSubmitEditing={addQna}
         onChangeText={setContent}
         value={content}
         placeholder="내용을 입력하세요"
+        multiline={true}
+        numberOfLines={10}
       />
       <QnaAddBtn onPress={handleAdding}>
         <Text>작성하기</Text>
@@ -92,6 +95,7 @@ const CommentAddInput = styled.TextInput`
   font-size: 19px;
   padding: 20px;
   background-color: white;
+  vertical-align: top;
 `;
 
 const QnaAddBtn = styled.TouchableOpacity`

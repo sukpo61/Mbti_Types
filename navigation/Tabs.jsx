@@ -7,6 +7,7 @@ import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import Add from "../components/Add";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-        component={QnA}
+        component={Add}
       />
       <Tab.Screen
         options={{
