@@ -1,5 +1,6 @@
 import React from "react";
+import { Text } from "react-native";
 
 export default function CommunityAdd() {
-  return <div>CommunityAdd</div>;
+  return <Text>CommunityAdd</Text>;
 }
