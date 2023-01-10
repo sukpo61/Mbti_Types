@@ -249,11 +249,11 @@ export default function SignUp({
           </RegisterButton>
         </ButtonsWrap>
       </ScrollView>
-      <AuthModal
+      <MBTIModal
         SetDisplayed={setDisplayed}
         Displayed={displayed}
         SetMBTI={setMBTI}
-      ></AuthModal>
+      ></MBTIModal>
     </>
   );
 }

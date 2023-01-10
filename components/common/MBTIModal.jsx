@@ -79,7 +79,14 @@ export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
   }
 
   return (
-    <Modal visible={Displayed} animationType={"slide"} transparent={true}>
+    <Modal
+      visible={Displayed}
+      animationType={"slide"}
+      transparent={true}
+      onRequestClose={() => {
+        SetDisplayed(false);
+      }}
+    >
       <MBTIWrap>
         <Gesture>
           <GestureRecognizer onSwipeDown={() => this.setModalVisible(false)}>
