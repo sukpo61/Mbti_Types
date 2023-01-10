@@ -86,7 +86,8 @@ const TitleAddInput = styled.TextInput`
   height: 80px;
   width: 100%;
   font-size: 19px;
-  padding: 5px 20px;
+  padding-left: 20px;
+  background-color: #efe8fa;
 `;
 
 const CommentAddInput = styled.TextInput`
@@ -102,7 +103,8 @@ const QnaAddBtn = styled.TouchableOpacity`
   margin: 20px;
   padding: 10px;
   border-radius: 20px;
-  border-width: 1px;
+  color: #584164;
   align-items: center;
-  background-color: #33a9f2;
+  justify-content: center;
+  background-color: #e7dfea;
 `;
