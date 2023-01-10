@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Community from "../screens/Community";
 import MyPage from "../screens/MyPage";
 import QnA from "../screens/QnA";
+import { TouchableOpacity } from "react-native";
 import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -19,10 +20,28 @@ export default function Tabs() {
         backgroundColor: "white",
       }}
       screenOptions={{
-        headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
-        tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
-        tabBarLabelPosition: "beside-icon",
         headerTitle: "",
+        headerStyle: { backgroundColor: "#EFE8FA" },
+        headerShadowVisible: false,
+        headerBackTitleVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => goBack()}
+            style={{ paddingLeft: 20 }}
+          >
+            <AntDesign name="left" color="#584164" />
+          </TouchableOpacity>
+        ),
+        // headerRight: () => {
+        //   return (
+        //     <TouchableOpacity onPress={handleAuth}>
+        //       <Text style={{ color: isDark ? YELLOW_COLOR : GREEN_COLOR }}>
+        //         {authService.currentUser ? "로그아웃" : "로그인"}
+        //       </Text>
+        //     </TouchableOpacity>
+        //   );
+        // },
+        headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
       }}
     >
       <Tab.Screen

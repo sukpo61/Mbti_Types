@@ -37,12 +37,13 @@ export default function Stack({
   return (
     <NativeStack.Navigator
       screenOptions={{
-        headerTitleAlign: "center",
+        headerTitle: "",
+        headerStyle: { backgroundColor: "#EFE8FA" },
+        headerShadowVisible: false,
+        headerBackTitleVisible: false,
         headerLeft: () => (
           <TouchableOpacity onPress={() => goBack()}>
-            <Text style={{ color: isDark ? YELLOW_COLOR : GREEN_COLOR }}>
-              뒤로
-            </Text>
+            <AntDesign name="left" color="#584164" />
           </TouchableOpacity>
         ),
         headerRight: () => {
