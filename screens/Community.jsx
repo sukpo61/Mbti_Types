@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components/native";
+import styled from "@emotion/native";
 import { Text, View, StyleSheet, SafeAreaView } from "react-native";
 import { Header } from "react-native/Libraries/NewAppScreen";
 
