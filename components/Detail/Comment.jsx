@@ -1,6 +1,8 @@
 import styled from "@emotion/native";
-import { Alert, Text, TouchableOpacity } from "react-native";
+import { Alert, Modal, Text, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons'
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "../../firebase";
@@ -12,14 +14,14 @@ export default function Comment ({comment}) {
 
   const queryClient = useQueryClient();
 
-  const [toggle, setToggle] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editContent, setEditContent] = useState("");
 
   // [댓글 수정] 클릭했을 때 text를 input으로 변환함.
   const setEdit = () => {
     setIsEdit(!isEdit); 
-    setToggle(!toggle);
+    setIsOpenModal(!isOpenModal);
   };
 
   // 댓글 수정하기.
@@ -45,7 +47,7 @@ export default function Comment ({comment}) {
       {text: "삭제",
       style: "destructive",
       onPress: () => {
-        setToggle(false);
+        setIsOpenModal(false);
         deleteDoc(doc(dbService, "communityComments", id));
       }}
     ])
@@ -66,19 +68,23 @@ export default function Comment ({comment}) {
               <MbtiColorBtn mbti={comment.mbti} />
               <Name>{comment.nickname}</Name>
               <Date>{getDate(comment.date)}</Date>
-              <ToggleBtn onPress={() => setToggle(!toggle)}>
+              <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
                   <MaterialCommunityIcons name="dots-vertical" size={23} color="gray" />
               </ToggleBtn>
-              {toggle &&
-                  <ToggleBox>
-                      <TouchableOpacity onPress={setEdit}>
-                          <ToggleText>댓글 수정</ToggleText>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => deleteMutate.mutate(comment.id)}>
-                          <ToggleText>댓글 삭제</ToggleText>
-                      </TouchableOpacity>
-                  </ToggleBox>
-              }
+                <Modal visible={isOpenModal} transparent animationType="slide" onRequestClose={() => setIsOpenModal(false)}>
+                  <BackBlur onPress={() => setIsOpenModal(false)}>
+                    <EditDeleteBox>
+                      <EditDeleteBtn onPress={setEdit}>
+                        <Feather name="edit" size={22} color="black" />
+                        <ToggleText>댓글 수정</ToggleText>
+                      </EditDeleteBtn>
+                      <EditDeleteBtn onPress={() => deleteMutate.mutate(comment.id)}>
+                      <FontAwesome name="trash-o" size={25} color="black" />
+                        <ToggleText>댓글 삭제</ToggleText>
+                      </EditDeleteBtn>
+                    </EditDeleteBox>
+                  </BackBlur>
+                </Modal>
           </NameDateMbtiBox>
           {isEdit 
           ? <EditInput autoFocus onSubmitEditing={() => editMutate(comment.id)} onChangeText={setEditContent} defaultValue={comment.content} /> 
@@ -144,5 +150,27 @@ const ToggleBox = styled.View`
 
 const ToggleText = styled.Text`
   padding: 3px 10px;
-  font-size: 19px;
+  font-size: 20px;
+`
+
+const BackBlur = styled.TouchableOpacity`
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.3);
+`
+
+const EditDeleteBox = styled.View`
+  height: 130px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  background-color: white;
+  justify-content: center;
+  padding: 0 30px;
+`
+
+const EditDeleteBtn = styled.TouchableOpacity`
+  flex-direction: row;
+  padding: 12px 0;
+  /* justify-content: center; */
+  align-items: center;
 `
