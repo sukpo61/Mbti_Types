@@ -8,7 +8,7 @@ import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import Add from "../components/Add";
+import CommunityAdd from "../screens/CommunityAdd";
 
 const Tab = createBottomTabNavigator();
 
@@ -27,20 +27,11 @@ export default function Tabs() {
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => goBack()}
-            style={{ paddingLeft: 20 }}
+            style={{ paddingLeft: 16 }}
           >
             <AntDesign name="left" color="#584164" />
           </TouchableOpacity>
         ),
-        // headerRight: () => {
-        //   return (
-        //     <TouchableOpacity onPress={handleAuth}>
-        //       <Text style={{ color: isDark ? YELLOW_COLOR : GREEN_COLOR }}>
-        //         {authService.currentUser ? "로그아웃" : "로그인"}
-        //       </Text>
-        //     </TouchableOpacity>
-        //   );
-        // },
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
       }}
     >
@@ -51,7 +42,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-        component={Add}
+        component={CommunityAdd}
       />
       <Tab.Screen
         options={{
