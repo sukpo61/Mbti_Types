@@ -20,6 +20,7 @@ export default function Tabs() {
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "below-icon",
+        tabBarLabelPosition: "below-icon",
         headerTitle: "",
         tabBarStyle: {backgroundColor: "#EFE8FA"},
         headerStyle: {backgroundColor: "#EFE8FA"},
