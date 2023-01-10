@@ -6,8 +6,11 @@ import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { dbService } from "../../firebase";
 import MbtiColorBtn from "../common/MbtiColorBtn";
 import { getDate } from "../../utils";
+import { useMutation, useQueryClient } from "react-query";
 
 export default function Comment ({comment}) {
+
+  const queryClient = useQueryClient();
 
   const [toggle, setToggle] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -27,6 +30,13 @@ export default function Comment ({comment}) {
     setIsEdit(false); 
   };
 
+  // 댓글 수정하기.
+  const { mutate: editMutate } = useMutation(editComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("communityComments")
+    }
+  });
+
   // 댓글 삭제하기
   const deleteComment = async (id) => {
     Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
@@ -35,28 +45,27 @@ export default function Comment ({comment}) {
       {text: "삭제",
       style: "destructive",
       onPress: () => {
-        deleteDoc(doc(dbService, "communityComments", id))
+        setToggle(false);
+        deleteDoc(doc(dbService, "communityComments", id));
       }}
     ])
   };
 
-  
-  // const stringDate = (date) => {
-  //   const year = date.getFullYear();
-  //   const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  //   const day = ("0" + date.getDate()).slice(-2);
-  //   console.log(year, month, day)
-  // };
-  // {new Date(comment.date).toLocaleDateString("kr")}
-
-
+  // FIXME: 왜 삭제만 실시간 업데이트가 안 될까???
+  // const { mutate: deleteMutate } = useMutation(deleteComment, {
+  const deleteMutate  = useMutation(deleteComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("communityComments")
+    }
+  });
+  // console.log(deleteMutate)
+ 
   return (
       <CommentBox>
           <NameDateMbtiBox>
               <MbtiColorBtn mbti={comment.mbti} />
               <Name>{comment.nickname}</Name>
               <Date>{getDate(comment.date)}</Date>
-              {/* <Date>{`${comment.date.slice(0,4)}/${comment.date.slice(4,6)}/${comment.date.slice(6,8)}`}</Date> */}
               <ToggleBtn onPress={() => setToggle(!toggle)}>
                   <MaterialCommunityIcons name="dots-vertical" size={23} color="gray" />
               </ToggleBtn>
@@ -65,14 +74,14 @@ export default function Comment ({comment}) {
                       <TouchableOpacity onPress={setEdit}>
                           <ToggleText>댓글 수정</ToggleText>
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => deleteComment(comment.id)}>
+                      <TouchableOpacity onPress={() => deleteMutate.mutate(comment.id)}>
                           <ToggleText>댓글 삭제</ToggleText>
                       </TouchableOpacity>
                   </ToggleBox>
               }
           </NameDateMbtiBox>
           {isEdit 
-          ? <EditInput autoFocus onSubmitEditing={() => editComment(comment.id)} onChangeText={setEditContent} defaultValue={comment.content} /> 
+          ? <EditInput autoFocus onSubmitEditing={() => editMutate(comment.id)} onChangeText={setEditContent} defaultValue={comment.content} /> 
           : <CommentText>{comment.content}</CommentText>}
       </CommentBox>
   )

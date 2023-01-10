@@ -5,16 +5,15 @@ import { useEffect, useState } from "react";
 import { dbService } from "../../firebase";
 import { addDoc, collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
 import Comment from "./Comment";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { postTime } from "../../utils";
 
 export default function CommentsList () {
 
     const queryClient = useQueryClient();
-    // const [comments, setComments] = useState(["hello"]);
+
     const [content, setContent] = useState("");
     const [isRefreshing, setIsRefreshing] = useState(false);
-
     const { dateString } = postTime();
 
     useEffect(() => {
@@ -34,23 +33,33 @@ export default function CommentsList () {
         id: doc.id,
         ...doc.data()
       }))
-      // setComments(array)
       return array;
-
-      // const array = [];
-      // await onSnapshot(q, (snapshot) => {
-      //   snapshot.docs.map((doc) => (
-      //     array.push({
-      //     id: doc.id,
-      //     ...doc.data()
-      //   })))
-      //   setComments(array)
-      // })
-      // return array;
     };
 
     const { data: comments, isLoading }  = useQuery("communityComments", getComments)
-    // console.log("data",comments)
+
+    // 댓글 추가할 때 새로운 댓글 객체.
+    const newCommnet = {
+      postId: "1",
+      userId: "test@naver.com",
+      nickname: "겨울",
+      date: dateString,
+      content,
+      mbti: "ISFP"
+    };
+
+    // 댓글 추가하기.
+    const addComment = async () => {
+        await addDoc(collection(dbService, "communityComments"), newCommnet);
+        setContent("");
+    };
+
+    // 댓글 추가하기.
+    const { mutate } = useMutation(addComment, {
+      onSuccess: () => {
+        queryClient.invalidateQueries("communityComments");
+      }
+    });
 
     // 새로고침하기
     const onRefresh = async () => {
@@ -66,21 +75,6 @@ export default function CommentsList () {
         </Loader>
       )
     }
-
-    // 댓글 추가하기.
-    const addComment = async () => {
-      const newCommnet = {
-        postId: "1",
-        userId: "test@naver.com",
-        nickname: "겨울",
-        date: dateString,
-        content,
-        mbti: "ISFP"
-      }
-
-        await addDoc(collection(dbService, "communityComments"), newCommnet);
-        setContent("");
-    };
 
     return (
       <>
@@ -103,7 +97,7 @@ export default function CommentsList () {
           </CommentsContainer>
         </Wrap>
         <CommentAddContainer>
-          <CommentInput value={content} onChangeText={setContent} onSubmitEditing={addComment} placeholder="댓글을 입력해주세요." />
+          <CommentInput value={content} onChangeText={setContent} onSubmitEditing={mutate} placeholder="댓글을 입력해주세요." />
           {/* <Entypo name="pencil" size={24} color="gray" style={{marginRight: 10}} /> */}
         </CommentAddContainer>
       </>
