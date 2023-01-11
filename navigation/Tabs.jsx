@@ -10,6 +10,7 @@ import { AntDesign } from "@expo/vector-icons";
 import CommunityAdd from "../screens/CommunityAdd";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CommunityDetail from "../screens/CommunityDetail";
+import CommunityEdit from "../screens/CommunityEdit";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,7 @@ export default function Tabs() {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
-      sceneContainerStyle={{backgroundColor: "white"}}
+      sceneContainerStyle={{ backgroundColor: "white" }}
       screenOptions={{
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
