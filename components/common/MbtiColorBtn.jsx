@@ -31,5 +31,5 @@ const Mbti = styled.Text`
   text-align: center;
   font-size: 20px;
   font-weight: bold;
-  padding-left: 4px;
+  padding-left: 2px;
 `

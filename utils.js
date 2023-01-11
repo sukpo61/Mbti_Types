@@ -27,5 +27,5 @@ export const postTime = () => {
 // 20230109171500 -> 2023/01/09로 전환
 // 사용 예시 <Date>{getDate(comment.date)}</Date>
 export const getDate = (date) => {
-  return `${date.slice(2,4)}.${date.slice(4,6)}.${date.slice(6,8)}`
+  return `${date?.slice(2,4)}.${date?.slice(4,6)}.${date?.slice(6,8)}`
 }
