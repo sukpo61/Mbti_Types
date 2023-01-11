@@ -18,7 +18,7 @@ export default function Tabs() {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
-      sceneContainerStyle={{backgroundColor: "white"}}
+      sceneContainerStyle={{ backgroundColor: "white" }}
       screenOptions={{
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
@@ -50,11 +50,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-<<<<<<< HEAD
         component={CommunityDetail}
-=======
-        component={CommunityEdit}
->>>>>>> b0f4d78c53849b9d7e3cf0957033916ca957a988
       />
       <Tab.Screen
         options={{
