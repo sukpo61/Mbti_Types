@@ -1,13 +1,30 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/native";
-import { SCREEN_HEIGHT } from "../utils"
-import { Modal, Text, View, StyleSheet, SafeAreaView, Button, TouchableOpacity,ScrollView,ScrollY } from "react-native";
+import { SCREEN_HEIGHT } from "../utils";
+import {
+  // Modal,
+  // Text,
+  // View,
+  // StyleSheet,
+  // SafeAreaView,
+  // Button,
+  // TouchableOpacity,
+  ScrollView,
+  ScrollY,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { dbService } from "../firebase";
-import { docs ,doc, query, getDocs, collection, orderBy, onSnapshot } from "firebase/firestore"
-import CommunityAdd from "./CommunityAdd";
-
+import {
+  docs,
+  doc,
+  query,
+  getDocs,
+  collection,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
+import MBTIModal from "../components/Common/MBTIModal";
 
 const Stack = createStackNavigator();
 
@@ -26,108 +43,103 @@ export default function Community({ children }) {
   `;
 
   const [postlist, setPostlist] = useState([]);
+  const [displayed, setDisplayed] = useState(false);
+  const [mbti, setMBTI] = useState("");
+  const [seeall, setSeeall] = useState(true);
 
   useEffect(() => {
     console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
-  }, [ScrollY])
+  }, [ScrollY]);
 
   useEffect(() => {
     getPostlist();
-  },[])
+  }, []);
 
   const getPostlist = () => {
+    const q = query(
+      collection(dbService, "communityPosts"),
+      orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
+    );
 
-   const q = query(
-     collection(dbService, "communityPosts"),
-     orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로 
-   );
+    const array = [];
+    onSnapshot(q, (snapshot) => {
+      // q (쿼리)안에 담긴 collection 내의 변화가 생길 때 마다 매번 실행됨
+      snapshot.docs.map((doc) =>
+        array.push({
+          id: doc.id,
+          ...doc.data(), // doc.data() : { text, createdAt, ...  }
+        })
+      );
+      setPostlist(array);
+    });
+  };
 
-   const array = [];
-   onSnapshot(q, (snapshot) => {  // q (쿼리)안에 담긴 collection 내의 변화가 생길 때 마다 매번 실행됨
-   snapshot.docs.map((doc) =>array.push({
-       id: doc.id,
-       ...doc.data() // doc.data() : { text, createdAt, ...  }
-      }
-      ));
-      setPostlist(array)
-   });
-  }
+  const mbticheck = (post) => {
+    if (mbti === "") {
+      return true;
+    } else {
+      return post.mbti === mbti;
+    }
+  };
 
   return (
     <View>
       <CommunityBtnWrap>
-
         <CommunityTopBtn>
           <Text>Top</Text>
         </CommunityTopBtn>
 
-        <CommunityAddBtn onPress={()=> navigation.navigate("CommunityAdd")}>
+        <CommunityAddBtn onPress={() => navigation.navigate("CommunityAdd")}>
           <Text>Add</Text>
         </CommunityAddBtn>
-
       </CommunityBtnWrap>
-    <ScrollView>
+      <ScrollView>
+        {/*TOPCONTAINER */}
+        <CommunityTitleContainer>
+          <CommunityTitle>커뮤니티</CommunityTitle>
+          <MBTIfilterBTn
+            onPress={() => {
+              setDisplayed(!displayed);
+            }}
+          >
+            <Text>MBTIFilter</Text>
+          </MBTIfilterBTn>
+        </CommunityTitleContainer>
 
-{/*TOPCONTAINER */}
-      <CommunityTitleContainer>
-        <CommunityTitle>커뮤니티</CommunityTitle>
-      <MBTIfilterBTn onPress={() => {
-          setDisplayed(!displayed);
-          setMBTI(children);
-        }}
-      >
-        <Text>MBTIFilter</Text>
-      </MBTIfilterBTn>
-      </CommunityTitleContainer>
-      {postlist.map((post)=>(
-        <>
-      <PostBox>
-        <PostTitleWrap>
-          <PostTitle>{post.title}</PostTitle>
-        </PostTitleWrap>
+        {postlist.map(
+          (post) =>
+            mbticheck(post) && (
+              <>
+                <PostBox>
+                  <PostTitleWrap>
+                    <PostTitle>{post.title}</PostTitle>
+                  </PostTitleWrap>
 
-        <PostDetailWrap>
-          <PostDetail>{post.content}</PostDetail>
-          <PostDetail>{post.date}</PostDetail>
-          <PostDetail>{post.mbti}</PostDetail>
-          <PostDetaillike>
-            <Text>♥+999</Text>
-          </PostDetaillike>
-
-        </PostDetailWrap>
-      </PostBox>
-      </>
-      ))}
-       {/* <Text>{children}</Text>
-      <Modal visible={displayed} animationType={"slide"} transparent={true}>
-        <BackBlur>
-          <MBTIWrap>
-            <MBTIScrollWrap>
-              <MBTIContainer>INTJ</MBTIContainer>
-              <MBTIContainer>INTP</MBTIContainer>
-              <MBTIContainer>ENTJ</MBTIContainer>
-              <MBTIContainer>ENTP</MBTIContainer>
-              <MBTIContainer>INFJ</MBTIContainer>
-              <MBTIContainer>INFP</MBTIContainer>
-              <MBTIContainer>ENFJ</MBTIContainer>
-              <MBTIContainer>ENFP</MBTIContainer>
-              <MBTIContainer>ISTJ</MBTIContainer>
-              <MBTIContainer>ISFJ</MBTIContainer>
-              <MBTIContainer>ESTJ</MBTIContainer>
-              <MBTIContainer>ESFJ</MBTIContainer>
-              <MBTIContainer>ISTP</MBTIContainer>
-              <MBTIContainer>ISFP</MBTIContainer>
-              <MBTIContainer>ESTP</MBTIContainer>
-              <MBTIContainer>ESFP</MBTIContainer>
-            </MBTIScrollWrap>
-          </MBTIWrap>
-        </BackBlur>
-      </Modal> */}
-
+                  <PostDetailWrap>
+                    <PostDetail>{post.content}</PostDetail>
+                    <PostDetail>{post.date}</PostDetail>
+                    <PostDetail>{post.mbti}</PostDetail>
+                    <PostDetaillike>
+                      <Text>♥+999</Text>
+                    </PostDetaillike>
+                  </PostDetailWrap>
+                </PostBox>
+              </>
+            )
+        )}
       </ScrollView>
-      </View>
+      <MBTIModal
+        SetDisplayed={setDisplayed}
+        Displayed={displayed}
+        SetMBTI={setMBTI}
+      ></MBTIModal>
+    </View>
   );
 }
+
+const View = styled.View`
+  flex: 1;
+`;
 const CommunityBtnWrap = styled.View`
   position: absolute;
   margin-right: 20px;
@@ -136,21 +148,22 @@ const CommunityBtnWrap = styled.View`
   right: 0;
 `;
 const CommunityTopBtn = styled.TouchableOpacity`
-width: 40px;
-height: 40px;
-background-color: #efe8fa;
-justify-content: center;
-align-items: center;
-border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #efe8fa;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
 `;
 
 const CommunityAddBtn = styled.TouchableOpacity`
-width: 40px;
-height: 40px;
-background-color: #efe8fa;
-justify-content: center;
-align-items: center;
-border-radius: 20px;
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: #efe8fa;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
 `;
 
 const CommunityTitleContainer = styled.View`
@@ -162,8 +175,7 @@ const CommunityTitleContainer = styled.View`
 `;
 
 const MBTIfilterBTn = styled.TouchableOpacity`
-margin-right: 10px;
-
+  margin-right: 10px;
 `;
 
 const CommunityTitle = styled.Text`
@@ -194,6 +206,4 @@ const PostDetail = styled.Text`
   margin-bottom: 5px;
 `;
 
-const PostDetaillike = styled.View`
-
-`
+const PostDetaillike = styled.View``;
