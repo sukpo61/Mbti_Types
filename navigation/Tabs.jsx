@@ -6,9 +6,10 @@ import QnA from "../screens/QnA";
 import { TouchableOpacity } from "react-native";
 import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import CommunityAdd from "../screens/CommunityAdd";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import CommunityDetail from "../screens/CommunityDetail";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,9 @@ export default function Tabs() {
         backgroundColor: "white",
       }}
       screenOptions={{
+        headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
+        tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
+        tabBarLabelPosition: "below-icon",
         headerTitle: "",
         headerStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,
@@ -32,13 +36,13 @@ export default function Tabs() {
             <AntDesign name="left" color="#584164" />
           </TouchableOpacity>
         ),
-        headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
+        tabBarStyle: {backgroundColor: "#EFE8FA"},
       }}
     >
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="local-movies" size={size} color={color} />
+            <MaterialCommunityIcons name="comment-question-outline" size={size} color={color} />
           ),
         }}
         name="상황문답"

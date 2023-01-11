@@ -1,9 +1,9 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text, TouchableOpacity, useColorScheme } from "react-native";
-// import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
+import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { authService } from "../firebase";
-import { signOut } from "firebase/auth";
+// import { signOut } from "firebase/auth";
 import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
 import CommunityAdd from "../screens/CommunityAdd";
@@ -12,6 +12,7 @@ import CommunityEdit from "../screens/CommunityEdit";
 import QnAAdd from "../screens/QnAAdd";
 import QnADetail from "../screens/QnADetail";
 import QnAEdit from "../screens/QnAEdit";
+import { AntDesign } from "@expo/vector-icons";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -34,8 +35,18 @@ export default function Stack({
       navigate("Login");
     }
   };
+  // {{
+  //   headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
+  //   tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
+  //   tabBarLabelPosition: "below-icon",
+  //   headerTitle: "",
+  //   tabBarStyle: { backgroundColor: "#EFE8FA" },
+  //   headerStyle: { backgroundColor: "#EFE8FA" },
+  // }}
+
   return (
     <NativeStack.Navigator
+      sceneContainerStyle={{ backgroundColor: "white" }}
       screenOptions={{
         headerTitle: "",
         headerStyle: { backgroundColor: "#EFE8FA" },
