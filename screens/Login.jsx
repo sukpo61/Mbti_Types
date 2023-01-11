@@ -125,7 +125,6 @@ export default function Login({
     // 로그인 요청
     signInWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인성공");
         setEmail("");
         setPw("");
         goBack();
@@ -151,7 +150,6 @@ export default function Login({
     // 회원가입 요청
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("로그인성공");
         setEmail("");
         setPw("");
         goBack();

@@ -8,7 +8,7 @@ import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import CommunityAdd from "../screens/CommunityAdd";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CommunityDetail from "../screens/CommunityDetail";
 
 const Tab = createBottomTabNavigator();
@@ -36,13 +36,17 @@ export default function Tabs() {
             <AntDesign name="left" color="#584164" />
           </TouchableOpacity>
         ),
-        tabBarStyle: {backgroundColor: "#EFE8FA"},
+        tabBarStyle: { backgroundColor: "#EFE8FA" },
       }}
     >
       <Tab.Screen
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="comment-question-outline" size={size} color={color} />
+            <MaterialCommunityIcons
+              name="comment-question-outline"
+              size={size}
+              color={color}
+            />
           ),
         }}
         name="상황문답"

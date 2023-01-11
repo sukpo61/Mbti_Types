@@ -1,86 +1,80 @@
 import styled from "@emotion/native";
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, Text } from "react-native";
-import {
-  onSnapshot,
-  query,
-  collection,
-  //doc,
-  orderBy,
-  addDoc,
-  //getDoc,
-  //getDocs,
-  //updateDoc,
-} from "firebase/firestore";
-import { async } from "@firebase/util";
-import { dbService } from "../firebase";
+import React, { useState, useEffect, useRef } from "react";
+import { Alert, Text } from "react-native";
+import { collection, addDoc } from "firebase/firestore";
+import { dbService, authService } from "../firebase";
+import { postTime } from "../utils";
 
-export default function CommunityAdd() {
+export default function CommunityAdd({ navigation: { navigate } }) {
+  const titleRef = useRef(null);
+  const contentRef = useRef(null);
   const [qnas, setQnas] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const CurrentUser = authService.currentUser;
+  const { dateString } = postTime();
 
   const newQna = {
     title,
-    userId: "test@test.com",
-    nickname: "글로리",
+    userId: CurrentUser?.email,
+    nickname: CurrentUser?.displayName,
     content,
-    date: new Date(),
-    category: "상황문답",
+    date: dateString,
+    category: "community",
+    mbti: CurrentUser?.photoURL,
+    likedUserList: [],
   };
 
   //상황질문 본문 추가하기
   const addQna = async () => {
-    await addDoc(collection(dbService, "q&aadd"), newQna);
+    await addDoc(collection(dbService, "communityPosts"), newQna);
     setTitle("");
     setContent("");
+    navigate("커뮤니티");
   };
 
-  const handleAdding = () => {
+  const CheckContents = () => {
+    if (!title) {
+      alert("제목을 입력하세요.");
+      return;
+    }
+    if (!content) {
+      alert("내용을 입력하세요.");
+      return;
+    }
     addQna();
   };
-
-  useEffect(() => {
-    const q = query(
-      collection(dbService, "q&aadd"),
-      orderBy("createdAt", "desc")
-    );
-
-    onSnapshot(q, (snapshot) => {
-      const newQnas = snapshot.docs.map((doc) => {
-        const newQna = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newQna;
-      });
-      setQnas(newQnas);
-    });
-  });
 
   return (
     <SafeAreaView>
       <TitleAddInput
-        onSubmitEditing={addQna}
+        ref={titleRef}
         onChangeText={setTitle}
         value={title}
         placeholder="제목"
+        onSubmitEditing={() => {
+          contentRef.current.focus();
+        }}
       />
       <CommentAddInput
+        ref={contentRef}
         textAlignVertical="top"
-        onSubmitEditing={addQna}
         onChangeText={setContent}
         value={content}
         placeholder="내용을 입력하세요."
         multiline={true}
         numberOfLines={10}
       />
-      <QnaAddBtn onPress={handleAdding}>
+      <QnaAddBtn onPress={CheckContents}>
         <Text>작성하기</Text>
       </QnaAddBtn>
     </SafeAreaView>
   );
 }
+
+const SafeAreaView = styled.SafeAreaView`
+  flex: 1;
+`;
 
 const TitleAddInput = styled.TextInput`
   height: 80px;
@@ -91,7 +85,6 @@ const TitleAddInput = styled.TextInput`
 `;
 
 const CommentAddInput = styled.TextInput`
-  height: 73%;
   width: 100%;
   font-size: 19px;
   padding: 20px;
@@ -100,7 +93,7 @@ const CommentAddInput = styled.TextInput`
 `;
 
 const QnaAddBtn = styled.TouchableOpacity`
-  margin: 20px;
+  margin: auto 20px 20px 20px;
   padding: 10px;
   border-radius: 20px;
   color: #584164;
