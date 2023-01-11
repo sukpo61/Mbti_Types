@@ -41,7 +41,7 @@ const Swipebar = styled.View`
   background: #79747e;
   border-radius: 2px;
 `;
-export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
+export default function AuthModal({ SetDisplayed, Displayed, SetMBTI }) {
   function MBTIContainer({ children }) {
     const Text = styled.Text``;
     const MBTI = styled.TouchableOpacity`

@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { emailRegex, pwRegex, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils";
 import { useColorScheme, Modal } from "react-native";
-import AuthModal from "../components/common/AuthModal";
+import AuthModal from "../components/global/AuthModal";
 
 const ScrollView = styled.ScrollView`
   height: ${SCREEN_HEIGHT + "px"};
