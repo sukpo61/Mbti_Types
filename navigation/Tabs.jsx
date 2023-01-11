@@ -7,6 +7,7 @@ import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 import { useColorScheme } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import CommunityDetail from "../screens/CommunityDetail";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +20,7 @@ export default function Tabs() {
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "beside-icon",
         headerTitle: "",
+        headerStyle: { backgroundColor: "#EFE8FA" },
       }}
     >
       <Tab.Screen
@@ -28,7 +30,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-        component={QnA}
+        component={CommunityDetail}
       />
       <Tab.Screen
         options={{
