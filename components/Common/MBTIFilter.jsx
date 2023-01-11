@@ -47,7 +47,11 @@ const Swipebar = styled.View`
   border-radius: 2px;
 `;
 
-export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
+export default function MBTIFilter({ SetDisplayed, Displayed, SetMBTI }) {
+  const setModalVisible = (visible) => {
+    this.setDisplayed(visible);
+  };
+
   function MBTIContainer({ children }) {
     const Text = styled.Text``;
     const MBTI = styled.TouchableOpacity`
@@ -65,7 +69,11 @@ export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
       <MBTI
         onPress={() => {
           SetDisplayed(!Displayed);
-          SetMBTI(children);
+          if (children === "전체 보기") {
+            SetMBTI("");
+          } else {
+            SetMBTI(children);
+          }
         }}
       >
         <Text>{children}</Text>
@@ -87,6 +95,7 @@ export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
           <Swipebar></Swipebar>
         </Gesture>
         <MBTIScrollWrap>
+          <MBTIContainer>전체 보기</MBTIContainer>
           <MBTIContainer>INTJ</MBTIContainer>
           <MBTIContainer>INTP</MBTIContainer>
           <MBTIContainer>ENTJ</MBTIContainer>

@@ -74,6 +74,7 @@ export default function CommunityAdd({ navigation: { navigate } }) {
 
 const SafeAreaView = styled.SafeAreaView`
   flex: 1;
+  background-color: white;
 `;
 
 const TitleAddInput = styled.TextInput`

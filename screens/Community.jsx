@@ -12,9 +12,9 @@ import {
   ScrollView,
   ScrollY,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { dbService } from "../firebase";
+import { AntDesign } from "@expo/vector-icons";
+
 import {
   docs,
   doc,
@@ -24,11 +24,13 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import MBTIModal from "../components/Common/MBTIModal";
+import MBTIFilter from "../components/common/MBTIFilter";
+import { getDate } from "../utils";
+import MbtiColorBtn from "../components/common/MbtiColorBtn";
 
-const Stack = createStackNavigator();
-
-export default function Community({ children }) {
+export default function Community({
+  navigation: { setOptions, navigate, reset },
+}) {
   const Text = styled.Text``;
   const MBTI = styled.TouchableOpacity`
     height: 32px;
@@ -85,16 +87,21 @@ export default function Community({ children }) {
   return (
     <View>
       <CommunityBtnWrap>
-        <CommunityTopBtn>
-          <Text>Top</Text>
-        </CommunityTopBtn>
-
-        <CommunityAddBtn onPress={() => navigation.navigate("CommunityAdd")}>
-          <Text>Add</Text>
+        <CommunityAddBtn
+          onPress={() => {
+            navigate("Stack", {
+              screen: "CommunityAdd",
+            });
+          }}
+        >
+          <AntDesign name="edit" size={20} color="#312070" />
         </CommunityAddBtn>
+
+        <CommunityTopBtn>
+          <AntDesign name="up" size={20} color="#312070" />
+        </CommunityTopBtn>
       </CommunityBtnWrap>
       <ScrollView>
-        {/*TOPCONTAINER */}
         <CommunityTitleContainer>
           <CommunityTitle>커뮤니티</CommunityTitle>
           <MBTIfilterBTn
@@ -116,9 +123,8 @@ export default function Community({ children }) {
                   </PostTitleWrap>
 
                   <PostDetailWrap>
-                    <PostDetail>{post.content}</PostDetail>
-                    <PostDetail>{post.date}</PostDetail>
-                    <PostDetail>{post.mbti}</PostDetail>
+                    <PostDetail>{getDate(post.date)}</PostDetail>
+                    <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
                     <PostDetaillike>
                       <Text>♥+999</Text>
                     </PostDetaillike>
@@ -128,11 +134,11 @@ export default function Community({ children }) {
             )
         )}
       </ScrollView>
-      <MBTIModal
+      <MBTIFilter
         SetDisplayed={setDisplayed}
         Displayed={displayed}
         SetMBTI={setMBTI}
-      ></MBTIModal>
+      ></MBTIFilter>
     </View>
   );
 }
@@ -146,6 +152,7 @@ const CommunityBtnWrap = styled.View`
   margin-bottom: 20px;
   bottom: 0;
   right: 0;
+  z-index: 2;
 `;
 const CommunityTopBtn = styled.TouchableOpacity`
   width: 40px;
@@ -157,7 +164,7 @@ const CommunityTopBtn = styled.TouchableOpacity`
 `;
 
 const CommunityAddBtn = styled.TouchableOpacity`
-  margin-top: 10px;
+  margin-bottom: 10px;
   width: 40px;
   height: 40px;
   background-color: #efe8fa;
