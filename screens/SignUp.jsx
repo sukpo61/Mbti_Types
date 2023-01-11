@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { emailRegex, pwRegex, SCREEN_WIDTH, SCREEN_HEIGHT } from "../utils";
 import { useColorScheme, Modal } from "react-native";
-import MBTIModal from "../components/common/MBTIModal";
+import AuthModal from "../components/global/AuthModal";
 
 const ScrollView = styled.ScrollView`
   height: ${SCREEN_HEIGHT + "px"};
@@ -246,11 +246,11 @@ export default function SignUp({
           </RegisterButton>
         </ButtonsWrap>
       </ScrollView>
-      <MBTIModal
+      <AuthModal
         SetDisplayed={setDisplayed}
         Displayed={displayed}
         SetMBTI={setMBTI}
-      ></MBTIModal>
+      ></AuthModal>
     </>
   );
 }

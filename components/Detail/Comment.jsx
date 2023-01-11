@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../../firebase";
-import MbtiColorBtn from "../common/MbtiColorBtn";
+import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 import { useMutation, useQueryClient } from "react-query";
 

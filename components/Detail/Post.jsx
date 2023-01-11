@@ -10,7 +10,7 @@ import { dbService } from "../../firebase";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import MbtiColorBtn from "../common/MbtiColorBtn";
+import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 
 export default function Post ({getPostId}) {
