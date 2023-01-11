@@ -13,13 +13,14 @@ import { MaterialIcons } from "@expo/vector-icons";
 import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 
-export default function Post() {
+export default function Post ({getPostId}) {
+
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     getposts();
   }, []);
-
+  
   // 포스트 불러오기
   const getposts = () => {
     const q = query(collection(dbService, "communityPosts"));
@@ -36,7 +37,7 @@ export default function Post() {
   };
 
   // 디테일 페이지에 보여 줄 하나의 본문.
-  const getone = posts.find((post) => post.id === "GU5TwLcm3z7ofHZwrmMI");
+  const getone = posts.find((post) => post.id === getPostId);
 
   // 본문 삭제하기.
   const deletePost = () => {
@@ -77,23 +78,23 @@ export default function Post() {
       </Wrap>
     </>
   );
-}
+};
 
 const Wrap = styled.View`
   padding: 20px;
   align-items: center;
-`;
+`
 
 const PostContainer = styled.View`
   width: 95%;
   padding-top: 20px;
-`;
+`
 
 const TitleMbtiBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
-`;
+`
 
 const StyledTitle = styled.Text`
   font-weight: 600;
@@ -105,12 +106,12 @@ const NameDateBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 15px;
-`;
+`
 
 const StyledDate = styled.Text`
   font-size: 16px;
   color: gray;
-`;
+`
 
 const StyledNickName = styled.Text`
   font-weight: 400;

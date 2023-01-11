@@ -16,7 +16,7 @@ const MBTIWrap = styled.View`
   flex-direction: column;
   width: 100%;
   align-items: center;
-  background-color: #efe8fa;
+  background-color: #EFE8FA;
   padding: 0 32px 0 32px;
   position: absolute;
   bottom: 0;
@@ -27,7 +27,7 @@ const MBTIScrollWrap = styled.ScrollView`
   display: flex;
   flex-direction: column;
   width: 100%;
-  background-color: #efe8fa;
+  background-color: #EFE8FA;
 `;
 const Gesture = styled.View`
   justify-content: center;
@@ -38,7 +38,7 @@ const Gesture = styled.View`
 const Swipebar = styled.View`
   width: 32px;
   height: 4px;
-  background: #79747e;
+  background: #79747E;
   border-radius: 2px;
 `;
 export default function AuthModal({ SetDisplayed, Displayed, SetMBTI }) {

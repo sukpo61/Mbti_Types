@@ -50,7 +50,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-        component={CommunityDetail}
+        component={QnA}
       />
       <Tab.Screen
         options={{

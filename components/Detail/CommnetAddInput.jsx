@@ -6,7 +6,7 @@ import { authService, dbService } from "../../firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { postTime } from "../../utils";
 
-export default function CommentAddInput () {
+export default function CommentAddInput ({getPostId}) {
     const [content, setContent] = useState("");
     const { navigate } = useNavigation();
     const queryClient = useQueryClient();
@@ -15,7 +15,7 @@ export default function CommentAddInput () {
 
     // 댓글 추가할 때 새로운 댓글 객체.
     const newCommnet = {
-      postId: "1",
+      postId: getPostId,
       userId: user?.email,
       nickname: user?.displayName,
       date: dateString,

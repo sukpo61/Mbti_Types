@@ -7,7 +7,7 @@ import { addDoc, collection, getDocs, onSnapshot, orderBy, query, deleteDoc, doc
 import Comment from "./Comment";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-export default function CommentsList () {
+export default function CommentsList ({getPostId}) {
 
     const queryClient = useQueryClient();
     const user = authService.currentUser;
@@ -36,6 +36,7 @@ export default function CommentsList () {
     };
 
     const { data: comments, isLoading }  = useQuery("communityComments", getComments)
+    const postComments = comments?.filter((co) => co.postId === getPostId)
 
     // 새로고침하기.
     const onRefresh = async () => {
@@ -65,8 +66,8 @@ export default function CommentsList () {
         >
           <Line />
           <CommentsContainer>
-              <CommentsCount>댓글 {comments.filter((co) => co.postId === "1").length}</CommentsCount>
-              {comments.map((co) => (
+              <CommentsCount>댓글 {postComments.length}</CommentsCount>
+              {postComments.map((co) => (
                 <Comment key={co.id} comment={co} />
               ))}
           </CommentsContainer>

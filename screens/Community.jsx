@@ -27,9 +27,10 @@ import {
 import MBTIFilter from "../components/global/MBTIFilter";
 import { getDate } from "../utils";
 import MbtiColorBtn from "../components/global/MbtiColorBtn";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function Community({
-  navigation: { setOptions, navigate, reset },
+  navigation: { setOptions, reset },
 }) {
   const Text = styled.Text``;
   const MBTI = styled.TouchableOpacity`
@@ -44,14 +45,19 @@ export default function Community({
     }
   `;
 
+  const { navigate } = useNavigation();
   const [postlist, setPostlist] = useState([]);
   const [displayed, setDisplayed] = useState(false);
   const [mbti, setMBTI] = useState("");
   const [seeall, setSeeall] = useState(true);
 
+  const user = authService.currentUser;
+
   useEffect(() => {
     console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
   }, [ScrollY]);
+
+
 
   useEffect(() => {
     getPostlist();
@@ -65,11 +71,10 @@ export default function Community({
 
     const array = [];
     onSnapshot(q, (snapshot) => {
-      // q (쿼리)안에 담긴 collection 내의 변화가 생길 때 마다 매번 실행됨
       snapshot.docs.map((doc) =>
         array.push({
           id: doc.id,
-          ...doc.data(), // doc.data() : { text, createdAt, ...  }
+          ...doc.data(),
         })
       );
       setPostlist(array);
@@ -84,15 +89,23 @@ export default function Community({
     }
   };
 
+  const handleAddBtn = () => {
+    if (!user) {
+      navigate("Stack", {
+        screen: "Login",
+      });
+    } else {
+      navigate("Stack", {
+        screen: "CommunityAdd",
+      });
+    }
+  };
+
   return (
     <View>
       <CommunityBtnWrap>
         <CommunityAddBtn
-          onPress={() => {
-            navigate("Stack", {
-              screen: "CommunityAdd",
-            });
-          }}
+          onPress={handleAddBtn}
         >
           <AntDesign name="edit" size={20} color="#312070" />
         </CommunityAddBtn>
@@ -117,7 +130,15 @@ export default function Community({
           (post) =>
             mbticheck(post) && (
               <>
-                <PostBox>
+                <PostBox
+                  key={post.id}
+                  onPress={() =>
+                    navigate("Stack", {
+                      screen: "CommunityDetail",
+                      params: { getPostId: post.id}
+                    })
+                  }
+                >
                   <PostTitleWrap>
                     <PostTitle>{post.title}</PostTitle>
                   </PostTitleWrap>
@@ -190,7 +211,7 @@ const CommunityTitle = styled.Text`
   margin-left: 10px;
   font-size: 20px;
 `;
-const PostBox = styled.View`
+const PostBox = styled.TouchableOpacity`
   width: 90%;
   margin-left: 10px;
   margin-bottom: 20px;

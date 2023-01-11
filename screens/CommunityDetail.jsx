@@ -4,15 +4,16 @@ import CommentAddInput from "../components/Detail/CommnetAddInput";
 import styled from "@emotion/native";
 import { ScrollView } from "react-native";
 
-export default function CommunityDetail() {
+export default function CommunityDetail({ route: { params: { getPostId } }}) {
 
+  // console.log(getPostId)
   return (
     <>
       <ScrollView>
-        <Post />
-        <CommentsList />
+        <Post  getPostId={getPostId} />
+        <CommentsList getPostId={getPostId} />
       </ScrollView>
-      <CommentAddInput />
+      <CommentAddInput getPostId={getPostId} />
     </>
   )
 };

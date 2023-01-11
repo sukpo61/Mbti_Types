@@ -37,6 +37,7 @@ export default function Stack({
   };
   return (
     <NativeStack.Navigator
+    sceneContainerStyle={{backgroundColor: "white"}}
       screenOptions={{
         cardStyle: {
           backgroundColor: "white",
