@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../../firebase";
-import MbtiColorBtn from "../common/MbtiColorBtn";
+import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -42,21 +42,24 @@ export default function Comment({ comment }) {
   // 댓글 삭제하기
   const deleteComment = async (id) => {
     // deleteDoc(doc(dbService, "communityComments", id));
-    const test =  Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
-      {text: "취소",
-      style: "cancel",
-      onPress: () => {
-        setIsOpenModal(false);
-      }
+    const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
+      {
+        text: "취소",
+        style: "cancel",
+        onPress: () => {
+          setIsOpenModal(false);
+        },
       },
-      {text: "삭제",
-      style: "destructive",
-      onPress: () => {
-        setIsOpenModal(false);
-        deleteDoc(doc(dbService, "communityComments", id));
-        return 'delete'
-      }}
-    ])
+      {
+        text: "삭제",
+        style: "destructive",
+        onPress: () => {
+          setIsOpenModal(false);
+          deleteDoc(doc(dbService, "communityComments", id));
+          return "delete";
+        },
+      },
+    ]);
     // console.log(test)
     // if (test === 'delete') {
     //   deleteDoc(doc(dbService, "communityComments", id));
@@ -71,43 +74,58 @@ export default function Comment({ comment }) {
       // refetch()
       // onRefresh()
       // queryClient.refetchQueries("communityComments");
-    }
+    },
   });
 
-  
-
   return (
-      <CommentBox>
-          <NameDateMbtiBox>
-              <MbtiColorBtn mbti={comment.mbti} />
-              <Name>{comment.nickname}</Name>
-              <Date>{getDate(comment.date)}</Date>
-              { user?.email == comment.userId ? 
-              <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
-                  <MaterialCommunityIcons name="dots-vertical" size={23} color="gray" />
-              </ToggleBtn> : null }
-                <Modal visible={isOpenModal} transparent animationType="slide" onRequestClose={() => setIsOpenModal(false)}>
-                  <BackBlur onPress={() => setIsOpenModal(false)}>
-                    <EditDeleteBox>
-                      <EditDeleteBtn onPress={setEdit}>
-                        <Feather name="edit" size={22} color="black" />
-                        <ToggleText>댓글 수정</ToggleText>
-                      </EditDeleteBtn>
-                      {/* <EditDeleteBtn onPress={() => deleteMutate(comment.id,{onSuccess: () => queryClient.invalidateQueries("communityComments")})}> */}
-                      <EditDeleteBtn onPress={() => deleteMutate.mutate(comment.id)}>
-                      <FontAwesome name="trash-o" size={25} color="black" />
-                        <ToggleText style={{paddingLeft: 12}}>댓글 삭제</ToggleText>
-                      </EditDeleteBtn>
-                    </EditDeleteBox>
-                  </BackBlur>
-                </Modal>
-          </NameDateMbtiBox>
-          {isEdit 
-          ? <EditInput autoFocus onSubmitEditing={() => editMutate(comment.id)} onChangeText={setEditContent} defaultValue={comment.content} /> 
-          : <CommentText>{comment.content}</CommentText>}
-      </CommentBox>
-  )
-};
+    <CommentBox>
+      <NameDateMbtiBox>
+        <MbtiColorBtn mbti={comment.mbti} />
+        <Name>{comment.nickname}</Name>
+        <Date>{getDate(comment.date)}</Date>
+        {user?.email == comment.userId ? (
+          <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
+            <MaterialCommunityIcons
+              name="dots-vertical"
+              size={23}
+              color="gray"
+            />
+          </ToggleBtn>
+        ) : null}
+        <Modal
+          visible={isOpenModal}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setIsOpenModal(false)}
+        >
+          <BackBlur onPress={() => setIsOpenModal(false)}>
+            <EditDeleteBox>
+              <EditDeleteBtn onPress={setEdit}>
+                <Feather name="edit" size={22} color="black" />
+                <ToggleText>댓글 수정</ToggleText>
+              </EditDeleteBtn>
+              {/* <EditDeleteBtn onPress={() => deleteMutate(comment.id,{onSuccess: () => queryClient.invalidateQueries("communityComments")})}> */}
+              <EditDeleteBtn onPress={() => deleteMutate.mutate(comment.id)}>
+                <FontAwesome name="trash-o" size={25} color="black" />
+                <ToggleText style={{ paddingLeft: 12 }}>댓글 삭제</ToggleText>
+              </EditDeleteBtn>
+            </EditDeleteBox>
+          </BackBlur>
+        </Modal>
+      </NameDateMbtiBox>
+      {isEdit ? (
+        <EditInput
+          autoFocus
+          onSubmitEditing={() => editMutate(comment.id)}
+          onChangeText={setEditContent}
+          defaultValue={comment.content}
+        />
+      ) : (
+        <CommentText>{comment.content}</CommentText>
+      )}
+    </CommentBox>
+  );
+}
 
 const CommentBox = styled.View`
   margin-bottom: 20px;

@@ -10,17 +10,16 @@ import { dbService } from "../../firebase";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import MbtiColorBtn from "../common/MbtiColorBtn";
+import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 
-export default function Post () {
-
+export default function Post() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     getposts();
   }, []);
-  
+
   // 포스트 불러오기
   const getposts = () => {
     const q = query(collection(dbService, "communityPosts"));
@@ -78,23 +77,23 @@ export default function Post () {
       </Wrap>
     </>
   );
-};
+}
 
 const Wrap = styled.View`
   padding: 20px;
   align-items: center;
-`
+`;
 
 const PostContainer = styled.View`
   width: 95%;
   padding-top: 20px;
-`
+`;
 
 const TitleMbtiBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
-`
+`;
 
 const StyledTitle = styled.Text`
   font-weight: 600;
@@ -106,12 +105,12 @@ const NameDateBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 15px;
-`
+`;
 
 const StyledDate = styled.Text`
   font-size: 16px;
   color: gray;
-`
+`;
 
 const StyledNickName = styled.Text`
   font-weight: 400;

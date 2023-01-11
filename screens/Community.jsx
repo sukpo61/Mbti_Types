@@ -24,9 +24,9 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import MBTIFilter from "../components/common/MBTIFilter";
+import MBTIFilter from "../components/global/MBTIFilter";
 import { getDate } from "../utils";
-import MbtiColorBtn from "../components/common/MbtiColorBtn";
+import MbtiColorBtn from "../components/global/MbtiColorBtn";
 
 export default function Community({
   navigation: { setOptions, navigate, reset },
