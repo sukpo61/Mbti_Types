@@ -156,14 +156,11 @@ export default function SignUp({
     // 회원가입 요청
     createUserWithEmailAndPassword(authService, email, pw)
       .then(() => {
-        console.log("2");
         updateProfile(authService.currentUser, {
           displayName: nick,
           photoURL: mbti,
         })
           .then(() => {
-            console.log(authService.currentUser.displayName);
-            console.log(authService.currentUser.photoURL);
             setEmail("");
             setPw("");
             setNick("");

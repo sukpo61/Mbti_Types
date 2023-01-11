@@ -29,6 +29,8 @@ const MbtiBtn = styled.View`
   background-color: ${(props) => props.mbtiColor};
   border-radius: 20px;
   margin-right: 5px;
+  justify-content: center;
+  align-items: center;
 `
 
 const Mbti = styled.Text`

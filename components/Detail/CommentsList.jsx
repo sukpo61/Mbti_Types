@@ -1,17 +1,21 @@
 import styled from "@emotion/native";
-import { ActivityIndicator, RefreshControl, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, RefreshControl, Text, TouchableOpacity, Alert } from "react-native";
 import { Entypo } from '@expo/vector-icons'; 
 import { useEffect, useState } from "react";
-import { dbService } from "../../firebase";
-import { addDoc, collection, getDocs, onSnapshot, orderBy, query } from "firebase/firestore";
+import { authService, dbService } from "../../firebase";
+import { addDoc, collection, getDocs, onSnapshot, orderBy, query, deleteDoc, doc } from "firebase/firestore";
 import Comment from "./Comment";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { postTime } from "../../utils";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CommentsList () {
 
     const queryClient = useQueryClient();
+    const { navigate } = useNavigation();
+    const user = authService.currentUser;
 
+    const [isOpenModal, setIsOpenModal] = useState(false);
     const [content, setContent] = useState("");
     const [isRefreshing, setIsRefreshing] = useState(false);
     const { dateString } = postTime();
@@ -41,12 +45,24 @@ export default function CommentsList () {
     // 댓글 추가할 때 새로운 댓글 객체.
     const newCommnet = {
       postId: "1",
-      userId: "test@naver.com",
-      nickname: "겨울",
+      userId: user?.email,
+      nickname: user?.displayName,
       date: dateString,
       content,
-      mbti: "ISFP"
+      mbti: user?.photoURL
     };
+
+    // 로그인하지 않고 댓글 입력창 클릭할 때
+    const addCommentHandler = () => {
+      if (!user) {
+        alert("댓글 작성은 로그인 후에 가능합니다.")
+        navigate("Stack", {
+          screen: "Login"
+        })
+      } else {
+        addMutate()
+      }
+    }
 
     // 댓글 추가하기.
     const addComment = async () => {
@@ -55,13 +71,13 @@ export default function CommentsList () {
     };
 
     // 댓글 추가하기.
-    const { mutate } = useMutation(addComment, {
+    const { mutate: addMutate } = useMutation(addComment, {
       onSuccess: () => {
         queryClient.invalidateQueries("communityComments");
       }
     });
 
-    // 새로고침하기
+    // 새로고침하기.
     const onRefresh = async () => {
       setIsRefreshing(true);
       await queryClient.refetchQueries("communityComments");
@@ -97,8 +113,7 @@ export default function CommentsList () {
           </CommentsContainer>
         </Wrap>
         <CommentAddContainer>
-          <CommentInput value={content} onChangeText={setContent} onSubmitEditing={mutate} placeholder="댓글을 입력해주세요." />
-          {/* <Entypo name="pencil" size={24} color="gray" style={{marginRight: 10}} /> */}
+          <CommentInput value={content} onChangeText={setContent} onSubmitEditing={addCommentHandler} placeholder="댓글을 입력해주세요." />
         </CommentAddContainer>
       </>
     )
