@@ -21,6 +21,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { getDate } from "../../utils";
+import { authService } from "../../firebase";
 
 export default function ComuPosts({ children }) {
   const Text = styled.Text``;
@@ -67,7 +68,7 @@ export default function ComuPosts({ children }) {
 
   return (
     <View>
-      <CommunityBtnWrap>
+      {/* <CommunityBtnWrap>
         <CommunityTopBtn>
           <Text>Top</Text>
         </CommunityTopBtn>
@@ -75,28 +76,30 @@ export default function ComuPosts({ children }) {
         <CommunityAddBtn onPress={() => navigation.navigate("CommunityAdd")}>
           <Text>Add</Text>
         </CommunityAddBtn>
-      </CommunityBtnWrap>
+      </CommunityBtnWrap> */}
       <ScrollView>
         {/*TOPCONTAINER */}
 
-        {postlist.map((post) => (
-          <>
-            <PostBox>
-              <PostTitleWrap>
-                <PostTitle>{post.title}</PostTitle>
-              </PostTitleWrap>
+        {postlist.map(
+          (post) =>
+            authService.currentUser.email === post.userId && (
+              <>
+                <PostBox>
+                  <PostTitleWrap>
+                    <PostTitle>{post.title}</PostTitle>
+                  </PostTitleWrap>
 
-              <PostDetailWrap>
-                <PostDetail>{post.content}</PostDetail>
-                <PostDetail>{getDate(post.date)}</PostDetail>
-                <PostDetail>{post.mbti}</PostDetail>
-                <PostDetaillike>
-                  <Text>♥+999</Text>
-                </PostDetaillike>
-              </PostDetailWrap>
-            </PostBox>
-          </>
-        ))}
+                  <PostDetailWrap>
+                    <PostDetail>{getDate(post.date)}</PostDetail>
+                    <PostDetail>{post.mbti}</PostDetail>
+                    <PostDetaillike>
+                      <Text>♥+999</Text>
+                    </PostDetaillike>
+                  </PostDetailWrap>
+                </PostBox>
+              </>
+            )
+        )}
       </ScrollView>
     </View>
   );
@@ -146,7 +149,7 @@ const CommunityTitle = styled.Text`
 const PostBox = styled.View`
   width: 90%;
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-top: 20px;
   border-bottom-color: #c8c8c8;
   border-bottom-width: 0.2px;
 `;
