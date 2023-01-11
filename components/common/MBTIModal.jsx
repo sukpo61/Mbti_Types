@@ -3,7 +3,7 @@ import styled from "@emotion/native";
 import { SCREEN_HEIGHT } from "../../utils";
 import { Modal } from "react-native";
 
-const BackBlur = styled.View`
+const BackBlur = styled.TouchableOpacity`
   width: 100%;
   height: ${SCREEN_HEIGHT + "px"};
   background-color: rgba(0, 0, 0, 0.3);
@@ -60,11 +60,7 @@ export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
       <MBTI
         onPress={() => {
           SetDisplayed(!Displayed);
-          if (children === "전체 선택") {
-            SetMBTI("");
-          } else {
-            SetMBTI(children);
-          }
+          SetMBTI(children);
         }}
       >
         <Text>{children}</Text>
@@ -73,13 +69,16 @@ export default function MBTIModal({ SetDisplayed, Displayed, SetMBTI }) {
   }
   return (
     <Modal visible={Displayed} animationType={"slide"} transparent={true}>
-      <BackBlur>
+      <BackBlur
+        onPress={() => {
+          SetDisplayed(false);
+        }}
+      >
         <MBTIWrap>
           <Gesture>
             <Swipebar></Swipebar>
           </Gesture>
           <MBTIScrollWrap>
-            <MBTIContainer>전체 선택</MBTIContainer>
             <MBTIContainer>INTJ</MBTIContainer>
             <MBTIContainer>INTP</MBTIContainer>
             <MBTIContainer>ENTJ</MBTIContainer>
