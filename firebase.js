@@ -4,10 +4,6 @@ import { getAuth } from "firebase/auth";
 
 
 
-const app = initializeApp(firebaseConfig);
-export const dbService = getFirestore(app);
-export const authService = getAuth(app);
-
 //고현석 꺼
 const firebaseConfig = {
   apiKey: "AIzaSyD6trVgVLj_UzoKmBmZ2pWX44j9ZLgFGqk",
@@ -19,6 +15,10 @@ const firebaseConfig = {
   measurementId: "G-CRYTSRWK2D",
 };
 
+
+const app = initializeApp(firebaseConfig);
+export const dbService = getFirestore(app);
+export const authService = getAuth(app);
 // 튜터님꺼
 // apiKey: "AIzaSyAv6jmIIhNnk7bMQNNj_GbLe0-mCdWp5kw",
 // authDomain: "rn-movie-11f0e.firebaseapp.com",

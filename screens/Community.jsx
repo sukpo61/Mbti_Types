@@ -1,109 +1,153 @@
-<<<<<<< Updated upstream
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/native";
-import { Text, View, StyleSheet, SafeAreaView } from "react-native";
-=======
-import { useEffect } from "react";
-import styled from "styled-components/native";
-import { SafeAreaView } from "react-native";
-import {
-  HTMLAllCollection,
-  doc,
-  getFirestore,
-  query,
-  setDoc,
-  getDocs,
-} from "firebase/firestore";
->>>>>>> Stashed changes
-import { Header } from "react-native/Libraries/NewAppScreen";
+import { Text, View, StyleSheet, SafeAreaView, Button, TouchableOpacity,ScrollView,ScrollY } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { dbService } from "../firebase";
+import { docs ,doc, query, getDocs, collection, orderBy, onSnapshot } from "firebase/firestore"
+import CommunityAdd from "./CommunityAdd";
 
-const post = {
-  contents: "1111",
-  date: "23.01.01",
-  title: "배고파",
-  username: "닉니엠",
-};
-export default function Community() {
+
+const Stack = createStackNavigator();
+
+export default function Community({ children }) {
+  const Text = styled.Text``;
+  const MBTI = styled.TouchableOpacity`
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    ${Text} {
+      font-size: 14px;
+      color: #584164;
+    }
+  `;
+
+  const [postlist, setPostlist] = useState([]);
+
   useEffect(() => {
-    (async () => {
-      const list = await getPosts();
-    })();
-  }, []);
+    console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
+  }, [ScrollY])
 
-  const getPosts = async () => {
-    const collectionRef = collection(getFirestore(), "posts");
-    const option = query(collectionRef);
-    const documentSnapshot = await getDocs(option);
-    const documents = documentSnapshot.docs.map((doc) => doc.data());
-  };
+  useEffect(() => {
+    getPostlist();
+  },[])
+
+  const getPostlist = () => {
+
+   const q = query(
+     collection(dbService, "communityPosts"),
+     orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로 
+   );
+
+   const array = [];
+   onSnapshot(q, (snapshot) => {  // q (쿼리)안에 담긴 collection 내의 변화가 생길 때 마다 매번 실행됨
+   snapshot.docs.map((doc) =>array.push({
+       id: doc.id,
+       ...doc.data() // doc.data() : { text, createdAt, ...  }
+      }
+      ));
+      setPostlist(array)
+   });
+  }
+
   return (
-    <SafeAreaView>
+    <View>
+
+      <CommunityBtnWrap>
+
+        <CommunityTopBtn>
+          <Text>Top</Text>
+        </CommunityTopBtn>
+
+        <CommunityAddBtn onPress={()=> navigation.navigate("CommunityAdd")}>
+          <Text>Add</Text>
+        </CommunityAddBtn>
+
+      </CommunityBtnWrap>
+    <ScrollView>
+
+{/*TOPCONTAINER */}
       <CommunityTitleContainer>
         <CommunityTitle>좋아요 순</CommunityTitle>
+      <MBTIfilterBTn>
+        <Text>MBTIFilter</Text>
+      </MBTIfilterBTn>
       </CommunityTitleContainer>
-
+      {postlist.map((post)=>(
+        <>
       <PostBox>
-        <PostItem post={post} />
         <PostTitleWrap>
-          <PostTitle>이게맞나 싶다</PostTitle>
+          <PostTitle>{post.title}</PostTitle>
         </PostTitleWrap>
 
         <PostDetailWrap>
-          <PostDetail>닉네임</PostDetail>
-          <PostDetail>23.01.01</PostDetail>
+          <PostDetail>{post.content}</PostDetail>
+          <PostDetail>{post.date}</PostDetail>
+          <PostDetail>{post.mbti}</PostDetail>
+          <PostDetaillike>
+            <Text>♥+999</Text>
+          </PostDetaillike>
+
         </PostDetailWrap>
       </PostBox>
-    </SafeAreaView>
+      </>
+      ))}
+      
+      </ScrollView>
+      </View>
   );
 }
+const CommunityBtnWrap = styled.View`
+  position: absolute;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  bottom: 0;
+  right: 0;
+`;
+const CommunityTopBtn = styled.TouchableOpacity`
+width: 40px;
+height: 40px;
+background-color: #efe8fa;
+justify-content: center;
+align-items: center;
+border-radius: 20px;
+`;
 
-<<<<<<< Updated upstream
-const styles = StyleSheet.create({
-  //* 게시글 타이틀
-  communityTitleContainer: {
-    // backgroundColor: "green",
-    marginBottom: 30,
-    fontWeight: "bold",
-  },
-  communityTitle: {
-    fontSize: 20,
-  },
+const CommunityAddBtn = styled.TouchableOpacity`
+width: 40px;
+height: 40px;
+background-color: #efe8fa;
+justify-content: center;
+align-items: center;
+border-radius: 20px;
+`;
 
-  //* 게시글 내용 (제목, 닉네임, 날짜)
-  postBox: {
-    marginLeft: 10,
-    marginBottom: 20,
-    borderBottomColor: "gray",
-    borderBottomWidth: 1,
-  },
-  postTitle: {
-    // backgroundColor: "beige",
-    marginBottom: 10,
-    fontSize: 15,
-  },
-  postDetailWrap: {
-    flexDirection: "row",
-  },
-  postDetail: {
-    fontSize: 12,
-    marginRight: 5,
-    marginBottom: 5,
-  },
-});
-=======
 const CommunityTitleContainer = styled.View`
   margin-bottom: 30px;
   font-weight: bold;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MBTIfilterBTn = styled.TouchableOpacity`
+margin-right: 10px;
+
 `;
 
 const CommunityTitle = styled.Text`
+  margin-top: 10px;
+  margin-left: 10px;
   font-size: 20px;
 `;
 const PostBox = styled.View`
+  width: 90%;
   margin-left: 10px;
   margin-bottom: 20px;
-  border-bottom-color: gray;
-  border-bottom-width: 1px;
+  border-bottom-color: #c8c8c8;
+  border-bottom-width: 0.2px;
 `;
 const PostTitleWrap = styled.View``;
 const PostTitle = styled.Text`
@@ -120,4 +164,7 @@ const PostDetail = styled.Text`
   margin-right: 5px;
   margin-bottom: 5px;
 `;
->>>>>>> Stashed changes
+
+const PostDetaillike = styled.View`
+
+`

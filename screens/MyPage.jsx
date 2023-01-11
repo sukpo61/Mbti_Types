@@ -1,13 +1,7 @@
-<<<<<<< Updated upstream
 import React from "react";
 import styled from "@emotion/native";
-=======
-import React, { useState, useCallback, useRef } from "react";
-import styled from "styled-components/native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
->>>>>>> Stashed changes
 
-const Tab = createMaterialTopTabNavigator();
+// const Tab = createMaterialTopTabNavigator();
 export default function MyPage() {
   return (
     <>
@@ -16,10 +10,10 @@ export default function MyPage() {
         <Text>INFP입니다.</Text>
       </MyPageTitleWrap>
 
-      <Tab.Navigator>
+      {/* <Tab.Navigator>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
+      </Tab.Navigator> */}
 
       <LogoutBox>
         <Text>로그아웃</Text>
