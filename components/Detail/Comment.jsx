@@ -1,8 +1,8 @@
 import styled from "@emotion/native";
 import { Alert, Modal, Text, TouchableOpacity } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons'; 
-import { FontAwesome } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../../firebase";
@@ -10,8 +10,7 @@ import MbtiColorBtn from "../common/MbtiColorBtn";
 import { getDate } from "../../utils";
 import { useMutation, useQueryClient } from "react-query";
 
-export default function Comment ({comment}) {
-
+export default function Comment({ comment }) {
   const queryClient = useQueryClient();
   const user = authService.currentUser;
 
@@ -21,23 +20,23 @@ export default function Comment ({comment}) {
 
   // [댓글 수정] 클릭했을 때 text를 input으로 변환함.
   const setEdit = () => {
-    setIsEdit(!isEdit); 
+    setIsEdit(!isEdit);
     setIsOpenModal(!isOpenModal);
   };
 
   // 댓글 수정하기.
   const editComment = async (id) => {
     await updateDoc(doc(dbService, "communityComments", id), {
-      content: editContent
+      content: editContent,
     });
-    setIsEdit(false); 
+    setIsEdit(false);
   };
 
   // 댓글 수정하기.
   const { mutate: editMutate } = useMutation(editComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries("communityComments")
-    }
+      queryClient.invalidateQueries("communityComments");
+    },
   });
 
   // 댓글 삭제하기
@@ -110,33 +109,32 @@ export default function Comment ({comment}) {
   )
 };
 
-
 const CommentBox = styled.View`
   margin-bottom: 20px;
-`
+`;
 
 const NameDateMbtiBox = styled.View`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
   margin-bottom: 8px;
-`
+`;
 
 const Name = styled.Text`
   font-size: 21px;
   font-weight: 500;
   margin-right: 5px;
-`
+`;
 
 const Date = styled.Text`
   font-size: 16px;
   color: gray;
   margin-right: 5px;
-`
+`;
 
 const CommentText = styled.Text`
   font-size: 20px;
-`
+`;
 
 const EditInput = styled.TextInput`
   border-bottom-color: gray;
@@ -144,17 +142,36 @@ const EditInput = styled.TextInput`
   font-size: 20px;
   padding: 0 10px;
   margin: 0 5px;
-`
+`;
 
 const ToggleBtn = styled.TouchableOpacity`
   position: absolute;
   right: 0;
-`
+`;
+
+const ToggleBox = styled.View`
+  height: 65px;
+  width: 100px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 7px;
+  top: 25px;
+  z-index: 1;
+  background-color: white;
+  border: 0.5px solid lightgray;
+`;
+
+const ToggleText = styled.Text`
+  padding: 3px 10px;
+  font-size: 20px;
+`;
 
 const BackBlur = styled.TouchableOpacity`
   flex: 1;
-  background-color: rgba(0, 0, 0, 0.2);
-`
+  background-color: rgba(0, 0, 0, 0.3);
+`;
 
 const EditDeleteBox = styled.View`
   height: 130px;
@@ -164,15 +181,10 @@ const EditDeleteBox = styled.View`
   background-color: white;
   justify-content: center;
   padding: 0 30px;
-`
+`;
 
 const EditDeleteBtn = styled.TouchableOpacity`
   flex-direction: row;
   padding: 12px 0;
   align-items: center;
-`
-
-const ToggleText = styled.Text`
-  padding: 3px 10px;
-  font-size: 20px;
-`
+`;
