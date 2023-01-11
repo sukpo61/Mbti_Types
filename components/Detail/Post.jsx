@@ -13,7 +13,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import MbtiColorBtn from "../common/MbtiColorBtn";
 import { getDate } from "../../utils";
 
-export default function Post () {
+export default function Post ({getPostId}) {
 
   const [posts, setPosts] = useState([]);
 
@@ -37,7 +37,7 @@ export default function Post () {
   };
 
   // 디테일 페이지에 보여 줄 하나의 본문.
-  const getone = posts.find((post) => post.id === "GU5TwLcm3z7ofHZwrmMI");
+  const getone = posts.find((post) => post.id === getPostId);
 
   // 본문 삭제하기.
   const deletePost = () => {
