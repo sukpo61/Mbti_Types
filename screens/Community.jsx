@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/native";
-import { Text, View, StyleSheet, SafeAreaView, Button, TouchableOpacity,ScrollView,ScrollY } from "react-native";
+import { SCREEN_HEIGHT } from "../utils"
+import { Modal, Text, View, StyleSheet, SafeAreaView, Button, TouchableOpacity,ScrollView,ScrollY } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { dbService } from "../firebase";
@@ -54,7 +55,6 @@ export default function Community({ children }) {
 
   return (
     <View>
-
       <CommunityBtnWrap>
 
         <CommunityTopBtn>
@@ -70,8 +70,12 @@ export default function Community({ children }) {
 
 {/*TOPCONTAINER */}
       <CommunityTitleContainer>
-        <CommunityTitle>좋아요 순</CommunityTitle>
-      <MBTIfilterBTn>
+        <CommunityTitle>커뮤니티</CommunityTitle>
+      <MBTIfilterBTn onPress={() => {
+          setDisplayed(!displayed);
+          setMBTI(children);
+        }}
+      >
         <Text>MBTIFilter</Text>
       </MBTIfilterBTn>
       </CommunityTitleContainer>
@@ -94,7 +98,32 @@ export default function Community({ children }) {
       </PostBox>
       </>
       ))}
-      
+       {/* <Text>{children}</Text>
+      <Modal visible={displayed} animationType={"slide"} transparent={true}>
+        <BackBlur>
+          <MBTIWrap>
+            <MBTIScrollWrap>
+              <MBTIContainer>INTJ</MBTIContainer>
+              <MBTIContainer>INTP</MBTIContainer>
+              <MBTIContainer>ENTJ</MBTIContainer>
+              <MBTIContainer>ENTP</MBTIContainer>
+              <MBTIContainer>INFJ</MBTIContainer>
+              <MBTIContainer>INFP</MBTIContainer>
+              <MBTIContainer>ENFJ</MBTIContainer>
+              <MBTIContainer>ENFP</MBTIContainer>
+              <MBTIContainer>ISTJ</MBTIContainer>
+              <MBTIContainer>ISFJ</MBTIContainer>
+              <MBTIContainer>ESTJ</MBTIContainer>
+              <MBTIContainer>ESFJ</MBTIContainer>
+              <MBTIContainer>ISTP</MBTIContainer>
+              <MBTIContainer>ISFP</MBTIContainer>
+              <MBTIContainer>ESTP</MBTIContainer>
+              <MBTIContainer>ESFP</MBTIContainer>
+            </MBTIScrollWrap>
+          </MBTIWrap>
+        </BackBlur>
+      </Modal> */}
+
       </ScrollView>
       </View>
   );
