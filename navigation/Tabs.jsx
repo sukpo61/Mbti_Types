@@ -10,6 +10,7 @@ import { AntDesign } from "@expo/vector-icons";
 import CommunityAdd from "../screens/CommunityAdd";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import CommunityDetail from "../screens/CommunityDetail";
+import CommunityEdit from "../screens/CommunityEdit";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +50,11 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
+<<<<<<< HEAD
         component={CommunityDetail}
+=======
+        component={CommunityEdit}
+>>>>>>> b0f4d78c53849b9d7e3cf0957033916ca957a988
       />
       <Tab.Screen
         options={{
