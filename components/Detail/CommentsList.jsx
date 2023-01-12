@@ -22,7 +22,7 @@ import {
 import Comment from "./Comment";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-export default function CommentsList({ getPostId }) {
+export default function CommentsList({ getPost }) {
   const queryClient = useQueryClient();
   const user = authService.currentUser;
 
@@ -55,7 +55,7 @@ export default function CommentsList({ getPostId }) {
     "communityComments",
     getComments
   );
-  const postComments = comments?.filter((co) => co.postId === getPostId);
+  const postComments = comments?.filter((co) => co.postId === getPost.id);
 
   // 새로고침하기.
   const onRefresh = async () => {
@@ -72,29 +72,25 @@ export default function CommentsList({ getPostId }) {
     );
   }
 
-    return (
-      <>
-        <Wrap 
-          contentContainerStyle={{alignItems: "center"}} 
-          refreshControl={
-            <RefreshControl 
-              refreshing={isRefreshing} 
-              onRefresh={onRefresh}
-            />
-          }    
-        >
-          <Line />
-          <CommentsContainer>
-              <CommentsCount>댓글 {postComments.length}</CommentsCount>
-              {postComments.map((co) => (
-                <Comment key={co.id} comment={co} />
-              ))}
-          </CommentsContainer>
-        </Wrap>
-      </>
-    )
-
-};
+  return (
+    <>
+      <Wrap
+        contentContainerStyle={{ alignItems: "center" }}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Line />
+        <CommentsContainer>
+          <CommentsCount>댓글 {postComments.length}</CommentsCount>
+          {postComments.map((co) => (
+            <Comment key={co.id} comment={co} />
+          ))}
+        </CommentsContainer>
+      </Wrap>
+    </>
+  );
+}
 
 const Loader = styled.View`
   flex: 1;

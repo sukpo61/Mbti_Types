@@ -6,14 +6,14 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { authService } from "../firebase";
-import { Feather } from '@expo/vector-icons';
-import { TouchableOpacity, Alert } from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { Alert } from "react-native";
 import {
   onSnapshot,
   query,
   collection,
   doc,
-  deleteDoc
+  deleteDoc,
 } from "firebase/firestore";
 import { dbService } from "../firebase";
 
@@ -23,7 +23,6 @@ export default function CommunityDetail({
     params: { getPost },
   },
 }) {
-
   const user = authService.currentUser;
   const [posts, setPosts] = useState([]);
   const { navigate } = useNavigation();
@@ -86,21 +85,21 @@ export default function CommunityDetail({
   // 로그인 여부에 따라 헤더 우측에 본문 수정, 삭제 아이콘 띄움.
   useFocusEffect(
     useCallback(() => {
-      console.log("useFocusEffect")
+      console.log("useFocusEffect");
       setOptions({
         headerRight: () => {
           return (
             <>
-            {user?.email == getPost?.userId ? (
-              <>
-                <TouchableOpacity onPress={goToEdit}>
-                  <Feather name="edit" size={22} color="black" />
-                </TouchableOpacity>
-                <DeleteBtn onPress={deletePost}>
-                  <Feather name="trash-2" size={23} color="black" />
-                </DeleteBtn>
-              </>
-            ) : null}
+              {user?.email == getPost?.userId ? (
+                <>
+                  <TouchableOpacity onPress={goToEdit}>
+                    <Feather name="edit" size={22} color="black" />
+                  </TouchableOpacity>
+                  <DeleteBtn onPress={deletePost}>
+                    <Feather name="trash-2" size={23} color="black" />
+                  </DeleteBtn>
+                </>
+              ) : null}
             </>
           );
         },
@@ -130,4 +129,4 @@ const ScrollView = styled.ScrollView`
 const DeleteBtn = styled.TouchableOpacity`
   margin-left: 15px;
   margin-right: 5px;
-`
+`;

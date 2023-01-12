@@ -132,9 +132,9 @@ export default function Community({ navigation: { setOptions, reset } }) {
       <ScrollView ref={scrollRef}>
         <Wrap>
           {postlist.map(
-            (post) =>
+            (post, index) =>
               mbticheck(post) && (
-                <View key={post.id}>
+                <View key={index}>
                   <PostBox
                     onPress={() =>
                       navigate("Stack", {
@@ -190,6 +190,7 @@ const View = styled.View`
   width: 100%;
   justify-content: center;
   align-items: center;
+  flex: 1;
 `;
 const CommunityBtnWrap = styled.View`
   position: absolute;
