@@ -6,7 +6,7 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { authService } from "../firebase";
-import { Feather } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons';
 import { TouchableOpacity, Alert } from "react-native";
 import {
   onSnapshot,
@@ -31,7 +31,7 @@ export default function CommunityDetail({
   useEffect(() => {
     getposts();
   }, []);
-  
+
   // 포스트 불러오기
   const getposts = () => {
     const q = query(collection(dbService, "communityPosts"));
@@ -91,14 +91,14 @@ export default function CommunityDetail({
         headerRight: () => {
           return (
             <>
-            {user?.email == getPost?.userId ? ( 
+            {user?.email == getPost?.userId ? (
               <>
                 <TouchableOpacity onPress={goToEdit}>
                   <Feather name="edit" size={22} color="black" />
                 </TouchableOpacity>
                 <DeleteBtn onPress={deletePost}>
                   <Feather name="trash-2" size={23} color="black" />
-                </DeleteBtn> 
+                </DeleteBtn>
               </>
             ) : null}
             </>
@@ -107,7 +107,7 @@ export default function CommunityDetail({
       });
     }, [])
   );
-
+  // console.log(getPostId)
   return (
     <>
       <ScrollView>
@@ -119,6 +119,10 @@ export default function CommunityDetail({
   );
 }
 
+const TouchableOpacity = styled.TouchableOpacity`
+  margin-left: 10px;
+`;
+const Text = styled.Text``;
 const ScrollView = styled.ScrollView`
   background-color: white;
 `;

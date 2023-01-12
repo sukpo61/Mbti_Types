@@ -1,56 +1,76 @@
 import styled from "@emotion/native";
-import { ActivityIndicator, RefreshControl } from "react-native";
-import { useState } from "react";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  Text,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { Entypo } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import { authService, dbService } from "../../firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 import Comment from "./Comment";
-import { useQuery, useQueryClient } from "react-query";
-import { useEffect } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
-export default function CommentsList ({getPost}) {
+export default function CommentsList({ getPostId }) {
+  const queryClient = useQueryClient();
+  const user = authService.currentUser;
 
-    const queryClient = useQueryClient();
-    const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-    useEffect(() => {
-        getComments();
-    }, []);
+  useEffect(() => {
+    getComments();
+  }, []);
 
-    // 댓글 데이터 불러오기.
-    const getComments = async () => {
-      const q = query(
-        collection(dbService, "communityComments"),
-        orderBy("date", "desc")
-      );
+  // 댓글 데이터 불러오기.
+  const getComments = async () => {
+    const q = query(
+      collection(dbService, "communityComments"),
+      orderBy("date", "desc")
+    );
 
-      const array = [];
-      const querySnapshot = await getDocs(q)
-      querySnapshot.forEach((doc) => array.push({
+    const array = [];
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) =>
+      array.push({
         id: doc.id,
-        ...doc.data()
-      }))
-      return array;
-    };
+        ...doc.data(),
+      })
+    );
+    return array;
+  };
 
-    const { data: comments, isLoading }  = useQuery("communityComments", getComments)
-    // 특정 본문의 댓글만 필터링하기.
-    const postComments = comments?.filter((co) => co.postId === getPost.id)
+  const { data: comments, isLoading } = useQuery(
+    "communityComments",
+    getComments
+  );
+  const postComments = comments?.filter((co) => co.postId === getPostId);
 
-    // 새로고침하기.
-    const onRefresh = async () => {
-      setIsRefreshing(true);
-      await queryClient.refetchQueries("communityComments");
-      setIsRefreshing(false);
-    };
+  // 새로고침하기.
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await queryClient.refetchQueries("communityComments");
+    setIsRefreshing(false);
+  };
 
-    // 로딩 중일 때 로딩 이미지.
-    if (isLoading || isRefreshing) {
-      return (
-        <Loader>
-          <ActivityIndicator size="large" />
-        </Loader>
-      )
-    }
+  if (isLoading || isRefreshing) {
+    return (
+      <Loader>
+        <ActivityIndicator size="large" />
+      </Loader>
+    );
+  }
 
     return (
       <>
@@ -80,11 +100,11 @@ const Loader = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-`
+`;
 
 const Wrap = styled.ScrollView`
- padding: 0 20px 0px 20px;
-`
+  padding: 0 20px 0px 20px;
+`;
 
 const Line = styled.View`
   width: 95%;
@@ -92,15 +112,15 @@ const Line = styled.View`
   text-align: center;
   background-color: lightgray;
   margin-top: 10px;
-`
+`;
 
 const CommentsContainer = styled.View`
   width: 95%;
   margin-bottom: 30px;
-`
+`;
 
 const CommentsCount = styled.Text`
-  font-size: 20px;
+  font-size: 15px;
   margin-bottom: 25px;
   margin-top: 30px;
-`
+`;
