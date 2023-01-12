@@ -5,7 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { dbService, authService } from "../firebase";
 import { postTime } from "../utils";
 
-export default function CommunityAdd({ navigation: { navigate } }) {
+export default function CommunityAdd({ navigation: { navigate, reset } }) {
   const titleRef = useRef(null);
   const contentRef = useRef(null);
   const [qnas, setQnas] = useState([]);
@@ -30,7 +30,17 @@ export default function CommunityAdd({ navigation: { navigate } }) {
     await addDoc(collection(dbService, "communityPosts"), newQna);
     setTitle("");
     setContent("");
-    navigate("커뮤니티");
+    reset({
+      index: 0,
+      routes: [
+        {
+          name: "Tabs",
+          params: {
+            screen: "커뮤니티",
+          },
+        },
+      ],
+    });
   };
 
   const CheckContents = () => {

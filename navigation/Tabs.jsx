@@ -29,14 +29,6 @@ export default function Tabs() {
         tabBarStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity
-            onPress={() => goBack()}
-            style={{ paddingLeft: 16 }}
-          >
-            <AntDesign name="left" color="#584164" />
-          </TouchableOpacity>
-        ),
       }}
     >
       <Tab.Screen
@@ -50,7 +42,7 @@ export default function Tabs() {
           ),
         }}
         name="상황문답"
-        component={QnA}
+        component={CommunityEdit}
       />
       <Tab.Screen
         options={{

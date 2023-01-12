@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/native";
 import {
   Text,
-  View,
   StyleSheet,
   SafeAreaView,
   Button,
@@ -22,6 +21,7 @@ import {
 } from "firebase/firestore";
 import { getDate } from "../../utils";
 import { authService } from "../../firebase";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function ComuPosts({ children }) {
   const Text = styled.Text``;
@@ -36,7 +36,7 @@ export default function ComuPosts({ children }) {
       color: #584164;
     }
   `;
-
+  const { navigate } = useNavigation();
   const [postlist, setPostlist] = useState([]);
 
   useEffect(() => {
@@ -67,43 +67,39 @@ export default function ComuPosts({ children }) {
   };
 
   return (
-    <View>
-      {/* <CommunityBtnWrap>
-        <CommunityTopBtn>
-          <Text>Top</Text>
-        </CommunityTopBtn>
+    <ScrollView>
+      {postlist.map(
+        (post) =>
+          authService.currentUser.email === post.userId && (
+            <View key={post.id}>
+              <PostBox
+                onPress={() =>
+                  navigate("Stack", {
+                    screen: "CommunityDetail",
+                    params: { getPostId: post.id },
+                  })
+                }
+              >
+                <PostTitleWrap>
+                  <PostTitle>{post.title}</PostTitle>
+                </PostTitleWrap>
 
-        <CommunityAddBtn onPress={() => navigation.navigate("CommunityAdd")}>
-          <Text>Add</Text>
-        </CommunityAddBtn>
-      </CommunityBtnWrap> */}
-      <ScrollView>
-        {/*TOPCONTAINER */}
-
-        {postlist.map(
-          (post) =>
-            authService.currentUser.email === post.userId && (
-              <>
-                <PostBox>
-                  <PostTitleWrap>
-                    <PostTitle>{post.title}</PostTitle>
-                  </PostTitleWrap>
-
-                  <PostDetailWrap>
-                    <PostDetail>{getDate(post.date)}</PostDetail>
-                    <PostDetail>{post.mbti}</PostDetail>
-                    <PostDetaillike>
-                      <Text>♥+999</Text>
-                    </PostDetaillike>
-                  </PostDetailWrap>
-                </PostBox>
-              </>
-            )
-        )}
-      </ScrollView>
-    </View>
+                <PostDetailWrap>
+                  <PostDetail>{getDate(post.date)}</PostDetail>
+                  <PostDetail>{post.mbti}</PostDetail>
+                  <PostDetaillike>
+                    <Text>♥+999</Text>
+                  </PostDetaillike>
+                </PostDetailWrap>
+              </PostBox>
+            </View>
+          )
+      )}
+    </ScrollView>
   );
 }
+const View = styled.View``;
+
 const CommunityBtnWrap = styled.View`
   position: absolute;
   margin-right: 20px;
@@ -146,7 +142,7 @@ const CommunityTitle = styled.Text`
   margin-left: 10px;
   font-size: 20px;
 `;
-const PostBox = styled.View`
+const PostBox = styled.TouchableOpacity`
   width: 90%;
   margin-left: 10px;
   margin-top: 20px;

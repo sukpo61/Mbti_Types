@@ -23,15 +23,21 @@ import { signOut } from "firebase/auth";
 export default function My({ navigation: { navigate, reset, setOptions } }) {
   const [postlist, setPostlist] = useState([]);
   const [pagestate, setPagestate] = useState(true);
+
   const logout = () => {
     signOut(authService)
       .then(() => {
         console.log("로그아웃 성공");
-        navigate({
-          name: "Tabs",
-          params: {
-            screen: "커뮤니티",
-          },
+        reset({
+          index: 0,
+          routes: [
+            {
+              name: "Tabs",
+              params: {
+                screen: "커뮤니티",
+              },
+            },
+          ],
         });
       })
       .catch((err) => alert(err));

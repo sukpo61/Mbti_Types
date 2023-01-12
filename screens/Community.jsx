@@ -14,6 +14,7 @@ import {
 } from "react-native";
 import { dbService } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
+import { authService } from "../firebase";
 
 import {
   docs,
@@ -29,9 +30,7 @@ import { getDate } from "../utils";
 import MbtiColorBtn from "../components/global/MbtiColorBtn";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-export default function Community({
-  navigation: { setOptions, reset },
-}) {
+export default function Community({ navigation: { setOptions, reset } }) {
   const Text = styled.Text``;
   const MBTI = styled.TouchableOpacity`
     height: 32px;
@@ -56,8 +55,6 @@ export default function Community({
   useEffect(() => {
     console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
   }, [ScrollY]);
-
-
 
   useEffect(() => {
     getPostlist();
@@ -102,11 +99,9 @@ export default function Community({
   };
 
   return (
-    <View>
+    <Wrap>
       <CommunityBtnWrap>
-        <CommunityAddBtn
-          onPress={handleAddBtn}
-        >
+        <CommunityAddBtn onPress={handleAddBtn}>
           <AntDesign name="edit" size={20} color="#312070" />
         </CommunityAddBtn>
 
@@ -129,13 +124,12 @@ export default function Community({
         {postlist.map(
           (post) =>
             mbticheck(post) && (
-              <>
+              <View key={post.id}>
                 <PostBox
-                  key={post.id}
                   onPress={() =>
                     navigate("Stack", {
                       screen: "CommunityDetail",
-                      params: { getPostId: post.id}
+                      params: { getPostId: post.id },
                     })
                   }
                 >
@@ -151,7 +145,7 @@ export default function Community({
                     </PostDetaillike>
                   </PostDetailWrap>
                 </PostBox>
-              </>
+              </View>
             )
         )}
       </ScrollView>
@@ -160,13 +154,14 @@ export default function Community({
         Displayed={displayed}
         SetMBTI={setMBTI}
       ></MBTIFilter>
-    </View>
+    </Wrap>
   );
 }
 
-const View = styled.View`
+const Wrap = styled.View`
   flex: 1;
 `;
+const View = styled.View``;
 const CommunityBtnWrap = styled.View`
   position: absolute;
   margin-right: 20px;
