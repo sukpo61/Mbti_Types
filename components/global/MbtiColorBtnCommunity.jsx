@@ -50,26 +50,19 @@ export default function MbtiColorBtn({ mbti }) {
 };
 
 const MbtiBtn = styled.View`
-  /* height: 23px;
-  width: 65px; */
-  height: 15px;
-  width: 50px;
+  height: 23px;
+  width: 65px;
   background-color: ${(props) => props.mbtiColor};
   border-radius: 20px;
   margin-right: 5px;
   justify-content: center;
   align-items: center;
-  //추가
-  position: absolute;
-  right: 0;
 `
 
 const Mbti = styled.Text`
   color: white;
-  /* line-height: 25px;
-  font-size: 20px; */
-  line-height: 18px;
-  font-size: 12px;
+  line-height: 25px;
+  font-size: 20px;
   font-weight: bold;
   padding-left: 2px;
 `

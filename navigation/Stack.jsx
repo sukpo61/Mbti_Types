@@ -51,6 +51,9 @@ export default function Stack({
             <AntDesign name="left" color="#584164" />
           </TouchableOpacity>
         ),
+        headerTitle: () => (
+          <Text>Detail</Text>
+        ),
         headerRight: () => {
           return (
             <TouchableOpacity onPress={handleAuth}>
