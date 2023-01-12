@@ -1,80 +1,23 @@
-import React, { useEffect, useState } from "react";
-import {
-  onSnapshot,
-  query,
-  collection,
-  doc,
-  deleteDoc,
-} from "firebase/firestore";
-import { dbService } from "../../firebase";
-import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
-import { MaterialIcons } from "@expo/vector-icons";
 import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
 
-export default function Post ({getPostId}) {
-
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    getposts();
-  }, []);
+export default function Post ({getPost}) {
   
-  // 포스트 불러오기
-  const getposts = () => {
-    const q = query(collection(dbService, "communityPosts"));
-    onSnapshot(q, (snapshot) => {
-      const posts = snapshot.docs.map((doc) => {
-        const newState = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newState;
-      });
-      setPosts(posts);
-    });
-  };
-
-  // 디테일 페이지에 보여 줄 하나의 본문.
-  const getone = posts.find((post) => post.id === getPostId);
-
-  // 본문 삭제하기.
-  const deletePost = () => {
-    Alert.alert("게시물 삭제", "정말 삭제 하시겠습니까?", [
-      {
-        text: "취소",
-        style: "cancel",
-      },
-      {
-        text: "삭제",
-        style: "destructive",
-        onPress: () => {
-          deleteDoc(doc(dbService, "communityPosts", getone.id));
-        },
-      },
-    ]);
-  };
-
   return (
     <>
       <Wrap>
         <PostContainer>
           <TitleMbtiBox>
-            <StyledTitle>{getone?.title}</StyledTitle>
-            <MbtiColorBtn mbti={getone?.mbti} />
+            <StyledTitle>{getPost?.title}</StyledTitle>
+            <MbtiColorBtn mbti={getPost?.mbti} />
           </TitleMbtiBox>
           <NameDateBox>
-            <StyledNickName>{getone?.nickname}</StyledNickName>
-            <StyledDate> {getDate(getone?.date)}</StyledDate>
+            <StyledNickName>{getPost?.nickname}</StyledNickName>
+            <StyledDate> {getDate(getPost?.date)}</StyledDate>
           </NameDateBox>
-          <StyledContent>{getone?.content}</StyledContent>
+          <StyledContent>{getPost?.content}</StyledContent>
         </PostContainer>
-        {/* <TouchableOpacity onPress={deletePost}>
-          <StyledDelete>
-            <MaterialIcons name="delete" size={24} color="black" />
-          </StyledDelete>
-        </TouchableOpacity> */}
       </Wrap>
     </>
   );

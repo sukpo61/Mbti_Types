@@ -2,66 +2,128 @@ import CommentsList from "../components/Detail/CommentsList";
 import Post from "../components/Detail/Post";
 import CommentAddInput from "../components/Detail/CommnetAddInput";
 import styled from "@emotion/native";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { useCallback } from "react";
 import { authService } from "../firebase";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from '@expo/vector-icons'; 
+import { TouchableOpacity, Alert } from "react-native";
+import {
+  onSnapshot,
+  query,
+  collection,
+  doc,
+  deleteDoc
+} from "firebase/firestore";
+import { dbService } from "../firebase";
 
 export default function CommunityDetail({
-  navigation: { setOptions, reset },
+  navigation: { setOptions, reset, goBack },
   route: {
-    params: { getPostId },
+    params: { getPost },
   },
 }) {
+
+  const user = authService.currentUser;
+  const [posts, setPosts] = useState([]);
+  const { navigate } = useNavigation();
+
+  useEffect(() => {
+    getposts();
+  }, []);
+  
+  // 포스트 불러오기
+  const getposts = () => {
+    const q = query(collection(dbService, "communityPosts"));
+    onSnapshot(q, (snapshot) => {
+      const posts = snapshot.docs.map((doc) => {
+        const newState = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newState;
+      });
+      setPosts(posts);
+    });
+  };
+
+  // 본문 삭제하기.
+  const deletePost = () => {
+    Alert.alert("게시물 삭제", "정말 삭제 하시겠습니까?", [
+      {
+        text: "취소",
+        style: "cancel",
+      },
+      {
+        text: "삭제",
+        style: "destructive",
+        onPress: () => {
+          deleteDoc(doc(dbService, "communityPosts", getPost?.id));
+          reset({
+            index: 0,
+            routes: [
+              {
+                name: "Tabs",
+                params: {
+                  screen: "커뮤니티",
+                },
+              },
+            ],
+          });
+        },
+      },
+    ]);
+  };
+
+  // 헤더에 수정 아이콘 클릭 시 수정 페이지로 이동.
+  const goToEdit = () => {
+    navigate("Stack", {
+      screen: "CommunityEdit",
+      params: { getPost },
+    });
+  };
+
+  // 로그인 여부에 따라 헤더 우측에 본문 수정, 삭제 아이콘 띄움.
   useFocusEffect(
-    // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
     useCallback(() => {
-      if (!authService.currentUser) {
-        reset({
-          index: 1,
-          routes: [
-            {
-              name: "Tabs",
-              params: { screen: "Movies" },
-            },
-            {
-              name: "Stacks",
-              params: { screen: "Login" },
-            },
-          ],
-        });
-        return;
-      }
+      console.log("useFocusEffect")
       setOptions({
         headerRight: () => {
           return (
             <>
-              <TouchableOpacity>
-                <MaterialIcons name="delete" size={24} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <MaterialIcons name="edit" size={24} color="black" />
-              </TouchableOpacity>
+            {user?.email == getPost?.userId ? ( 
+              <>
+                <TouchableOpacity onPress={goToEdit}>
+                  <Feather name="edit" size={22} color="black" />
+                </TouchableOpacity>
+                <DeleteBtn onPress={deletePost}>
+                  <Feather name="trash-2" size={23} color="black" />
+                </DeleteBtn> 
+              </>
+            ) : null}
             </>
           );
         },
       });
     }, [])
   );
-  // console.log(getPostId)
+
   return (
     <>
       <ScrollView>
-        <Post getPostId={getPostId} />
-        <CommentsList getPostId={getPostId} />
+        <Post getPost={getPost} />
+        <CommentsList getPost={getPost} />
       </ScrollView>
-      <CommentAddInput getPostId={getPostId} />
+      <CommentAddInput getPost={getPost} />
     </>
   );
 }
 
-const TouchableOpacity = styled.TouchableOpacity``;
-const Text = styled.Text``;
 const ScrollView = styled.ScrollView`
   background-color: white;
 `;
+
+const DeleteBtn = styled.TouchableOpacity`
+  margin-left: 15px;
+  margin-right: 5px;
+`

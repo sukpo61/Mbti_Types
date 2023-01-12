@@ -1,18 +1,15 @@
 import styled from "@emotion/native";
-import { ActivityIndicator, RefreshControl, Text, TouchableOpacity, Alert } from "react-native";
-import { Entypo } from '@expo/vector-icons'; 
-import { useEffect, useState } from "react";
+import { ActivityIndicator, RefreshControl } from "react-native";
+import { useState } from "react";
 import { authService, dbService } from "../../firebase";
-import { addDoc, collection, getDocs, onSnapshot, orderBy, query, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import Comment from "./Comment";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
+import { useEffect } from "react";
 
-export default function CommentsList ({getPostId}) {
+export default function CommentsList ({getPost}) {
 
     const queryClient = useQueryClient();
-    const user = authService.currentUser;
-
-    const [isOpenModal, setIsOpenModal] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     useEffect(() => {
@@ -36,7 +33,8 @@ export default function CommentsList ({getPostId}) {
     };
 
     const { data: comments, isLoading }  = useQuery("communityComments", getComments)
-    const postComments = comments?.filter((co) => co.postId === getPostId)
+    // 특정 본문의 댓글만 필터링하기.
+    const postComments = comments?.filter((co) => co.postId === getPost.id)
 
     // 새로고침하기.
     const onRefresh = async () => {
@@ -45,6 +43,7 @@ export default function CommentsList ({getPostId}) {
       setIsRefreshing(false);
     };
 
+    // 로딩 중일 때 로딩 이미지.
     if (isLoading || isRefreshing) {
       return (
         <Loader>

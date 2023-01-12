@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/native";
-import { SCREEN_HEIGHT } from "../utils";
 import {
-  // Modal,
-  // Text,
-  // View,
-  // StyleSheet,
-  // SafeAreaView,
-  // Button,
-  // TouchableOpacity,
+  ActivityIndicator, 
+  RefreshControl,
   ScrollView,
   ScrollY,
+  Text
 } from "react-native";
 import { dbService } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
 import { authService } from "../firebase";
-
 import {
-  docs,
-  doc,
   query,
-  getDocs,
   collection,
   orderBy,
   onSnapshot,
@@ -31,24 +22,12 @@ import MbtiColorBtn from "../components/global/MbtiColorBtn";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 export default function Community({ navigation: { setOptions, reset } }) {
-  const Text = styled.Text``;
-  const MBTI = styled.TouchableOpacity`
-    height: 32px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    ${Text} {
-      font-size: 14px;
-      color: #584164;
-    }
-  `;
 
   const { navigate } = useNavigation();
   const [postlist, setPostlist] = useState([]);
   const [displayed, setDisplayed] = useState(false);
   const [mbti, setMBTI] = useState("");
-  const [seeall, setSeeall] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const user = authService.currentUser;
 
@@ -57,13 +36,20 @@ export default function Community({ navigation: { setOptions, reset } }) {
   }, [ScrollY]);
 
   useEffect(() => {
-    getPostlist();
+    // getPostlist();
+    console.log("useEffect")
   }, []);
 
+  useFocusEffect(useCallback(() => {
+    console.log("useFocusEffect")
+    getPostlist()
+  }, []))
+
+  // 본문 데이터 불러오기.
   const getPostlist = () => {
     const q = query(
       collection(dbService, "communityPosts"),
-      orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
+      orderBy("date", "desc")
     );
 
     const array = [];
@@ -78,6 +64,22 @@ export default function Community({ navigation: { setOptions, reset } }) {
     });
   };
 
+  // 새로고침하기.
+  // const onRefresh = async () => {
+  //   setIsRefreshing(true);
+  //   await getPostlist();
+  //   setIsRefreshing(false);
+  // };
+
+  if (isRefreshing) {
+    return (
+      <Loader>
+        <ActivityIndicator size="large" />
+      </Loader>
+    )
+  }
+
+  // mbti 카테고리 필터링
   const mbticheck = (post) => {
     if (mbti === "") {
       return true;
@@ -86,6 +88,7 @@ export default function Community({ navigation: { setOptions, reset } }) {
     }
   };
 
+  // 헤더에 글 작성 아이콘 클릭 시 로그인 여부에 따라 페이지 이동.
   const handleAddBtn = () => {
     if (!user) {
       navigate("Stack", {
@@ -99,7 +102,13 @@ export default function Community({ navigation: { setOptions, reset } }) {
   };
 
   return (
-    <Wrap>
+    <Wrap
+    // refreshControl={
+    //   <RefreshControl 
+    //     refreshing={isRefreshing} 
+    //     onRefresh={onRefresh}
+    //   />}  
+      >
       <CommunityBtnWrap>
         <CommunityAddBtn onPress={handleAddBtn}>
           <AntDesign name="edit" size={20} color="#312070" />
@@ -129,7 +138,7 @@ export default function Community({ navigation: { setOptions, reset } }) {
                   onPress={() =>
                     navigate("Stack", {
                       screen: "CommunityDetail",
-                      params: { getPostId: post.id },
+                      params: { getPost: post },
                     })
                   }
                 >
@@ -157,6 +166,12 @@ export default function Community({ navigation: { setOptions, reset } }) {
     </Wrap>
   );
 }
+
+const Loader = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`
 
 const Wrap = styled.View`
   flex: 1;

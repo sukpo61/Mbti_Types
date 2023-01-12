@@ -76,7 +76,7 @@ export default function ComuPosts({ children }) {
                 onPress={() =>
                   navigate("Stack", {
                     screen: "CommunityDetail",
-                    params: { getPostId: post.id },
+                    params: { getPost: post },
                   })
                 }
               >
