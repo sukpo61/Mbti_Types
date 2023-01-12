@@ -65,7 +65,6 @@ export default function ComuPosts({ children }) {
       setPostlist(array);
     });
   };
-
   return (
     <ScrollView>
       {postlist.map(
@@ -76,7 +75,7 @@ export default function ComuPosts({ children }) {
                 onPress={() =>
                   navigate("Stack", {
                     screen: "CommunityDetail",
-                    params: { getPostId: post.id },
+                    params: { getPost: post },
                   })
                 }
               >

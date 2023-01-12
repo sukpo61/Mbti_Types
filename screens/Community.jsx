@@ -129,7 +129,7 @@ export default function Community({ navigation: { setOptions, reset } }) {
                   onPress={() =>
                     navigate("Stack", {
                       screen: "CommunityDetail",
-                      params: { getPostId: post.id },
+                      params: { getPost: post },
                     })
                   }
                 >

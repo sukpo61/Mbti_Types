@@ -10,28 +10,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 export default function CommunityDetail({
   navigation: { setOptions, reset },
   route: {
-    params: { getPostId },
+    params: { getPost },
   },
 }) {
   useFocusEffect(
     // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
     useCallback(() => {
-      if (!authService.currentUser) {
-        reset({
-          index: 1,
-          routes: [
-            {
-              name: "Tabs",
-              params: { screen: "Movies" },
-            },
-            {
-              name: "Stacks",
-              params: { screen: "Login" },
-            },
-          ],
-        });
-        return;
-      }
       setOptions({
         headerRight: () => {
           return (
@@ -48,14 +32,13 @@ export default function CommunityDetail({
       });
     }, [])
   );
-  // console.log(getPostId)
   return (
     <>
       <ScrollView>
-        <Post getPostId={getPostId} />
-        <CommentsList getPostId={getPostId} />
+        <Post getPost={getPost} />
+        <CommentsList getPostId={getPost.id} />
       </ScrollView>
-      <CommentAddInput getPostId={getPostId} />
+      <CommentAddInput getPostId={getPost.id} />
     </>
   );
 }
