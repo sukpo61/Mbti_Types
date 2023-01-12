@@ -14,7 +14,7 @@ import {
   collection,
   doc,
   deleteDoc,
-  where
+  where,
 } from "firebase/firestore";
 import { dbService } from "../firebase";
 
@@ -28,27 +28,27 @@ export default function CommunityDetail({
   const [posts, setPosts] = useState([]);
   const { navigate } = useNavigation();
 
-  useEffect(() => {
-    getposts();
-  }, []);
+  // useEffect(() => {
+  //   getposts();
+  // }, []);
 
   // 포스트 불러오기
-  const getposts = () => {
-    const q = query(
-      collection(dbService, "posts"),
-      where("category", "==", "community")
-    );
-    onSnapshot(q, (snapshot) => {
-      const posts = snapshot.docs.map((doc) => {
-        const newState = {
-          id: doc.id,
-          ...doc.data(),
-        };
-        return newState;
-      });
-      setPosts(posts);
-    });
-  };
+  // const getposts = () => {
+  //   const q = query(
+  //     collection(dbService, "posts"),
+  //     where("category", "==", "community")
+  //   );
+  //   onSnapshot(q, (snapshot) => {
+  //     const posts = snapshot.docs.map((doc) => {
+  //       const newState = {
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       };
+  //       return newState;
+  //     });
+  //     setPosts(posts);
+  //   });
+  // };
 
   // 본문 삭제하기.
   const deletePost = () => {
