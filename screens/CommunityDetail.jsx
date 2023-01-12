@@ -37,10 +37,10 @@ export default function CommunityDetail({
           return (
             <>
               <TouchableOpacity>
-                <MaterialIcons name="delete" size={24} color="black" />
+                <MaterialIcons name="delete" size={30} color="black" />
               </TouchableOpacity>
               <TouchableOpacity>
-                <MaterialIcons name="edit" size={24} color="black" />
+                <MaterialIcons name="edit" size={30} color="black" />
               </TouchableOpacity>
             </>
           );
@@ -60,7 +60,9 @@ export default function CommunityDetail({
   );
 }
 
-const TouchableOpacity = styled.TouchableOpacity``;
+const TouchableOpacity = styled.TouchableOpacity`
+  margin-left: 10px;
+`;
 const Text = styled.Text``;
 const ScrollView = styled.ScrollView`
   background-color: white;

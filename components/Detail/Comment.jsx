@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useRef, useState } from "react";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { authService, dbService } from "../../firebase";
-import MbtiColorBtn from "../global/MbtiColorBtn";
+import DetailMbtiColorBtn from "../global/DetailMbtiColorBtn";
 import { getDate } from "../../utils";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -80,8 +80,8 @@ export default function Comment({ comment }) {
   return (
     <CommentBox>
       <NameDateMbtiBox>
-        <MbtiColorBtn mbti={comment.mbti} />
         <Name>{comment.nickname}</Name>
+        <DetailMbtiColorBtn mbti={comment.mbti} />
         <Date>{getDate(comment.date)}</Date>
         {user?.email == comment.userId ? (
           <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
@@ -151,7 +151,7 @@ const Date = styled.Text`
 `;
 
 const CommentText = styled.Text`
-  font-size: 20px;
+  font-size: 15px;
 `;
 
 const EditInput = styled.TextInput`

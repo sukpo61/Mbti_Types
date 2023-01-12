@@ -10,17 +10,16 @@ import { dbService } from "../../firebase";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
+import DetailMbtiColorBtn from "../global/DetailMbtiColorBtn";
 
-export default function Post ({getPostId}) {
-
+export default function Post({ getPostId }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     getposts();
   }, []);
-  
+
   // 포스트 불러오기
   const getposts = () => {
     const q = query(collection(dbService, "communityPosts"));
@@ -62,10 +61,10 @@ export default function Post ({getPostId}) {
         <PostContainer>
           <TitleMbtiBox>
             <StyledTitle>{getone?.title}</StyledTitle>
-            <MbtiColorBtn mbti={getone?.mbti} />
           </TitleMbtiBox>
           <NameDateBox>
             <StyledNickName>{getone?.nickname}</StyledNickName>
+            <DetailMbtiColorBtn mbti={getone?.mbti} />
             <StyledDate> {getDate(getone?.date)}</StyledDate>
           </NameDateBox>
           <StyledContent>{getone?.content}</StyledContent>
@@ -78,27 +77,27 @@ export default function Post ({getPostId}) {
       </Wrap>
     </>
   );
-};
+}
 
 const Wrap = styled.View`
   padding: 20px;
   align-items: center;
-`
+`;
 
 const PostContainer = styled.View`
   width: 95%;
   padding-top: 20px;
-`
+`;
 
 const TitleMbtiBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 5px;
-`
+`;
 
 const StyledTitle = styled.Text`
   font-weight: 600;
-  font-size: 23px;
+  font-size: 18px;
   margin-right: 10px;
 `;
 
@@ -106,12 +105,12 @@ const NameDateBox = styled.View`
   flex-direction: row;
   align-items: center;
   margin-bottom: 15px;
-`
+`;
 
 const StyledDate = styled.Text`
   font-size: 16px;
   color: gray;
-`
+`;
 
 const StyledNickName = styled.Text`
   font-weight: 400;
@@ -120,5 +119,5 @@ const StyledNickName = styled.Text`
 `;
 
 const StyledContent = styled.Text`
-  font-size: 19px;
+  font-size: 17px;
 `;
