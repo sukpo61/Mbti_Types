@@ -5,35 +5,157 @@ import {
   collection,
   doc,
   deleteDoc,
+  orderBy,
+  updateDoc,
+  getDoc,
 } from "firebase/firestore";
-import { dbService } from "../../firebase";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import MbtiColorBtn from "../global/MbtiColorBtn";
 import { getDate } from "../../utils";
-import DetailMbtiColorBtn from "../global/DetailMbtiColorBtn";
+import { AntDesign } from "@expo/vector-icons";
+import { authService } from "../../firebase";
+import { dbService } from "../../firebase";
+import { async } from "@firebase/util";
 
-export default function Post ({getPost}) {
+export default function Post({ getPost }) {
+  // console.log("getPost :", getPost);
+
+  const [post, setPost] = useState(getPost);
+  const [state, setState] = useState(false);
+
+  const getpost = () => {
+    const q = query(collection(dbService, "communityPosts"));
+    onSnapshot(q, (snapshot) => {
+      const posts = snapshot.docs.map((doc) => {
+        const newState = {
+          id: doc.id,
+          ...doc.data(),
+        };
+        return newState;
+      });
+      // console.log("post", posts);
+      const getone = posts.find((post) => post?.id === getPost?.id);
+      setPost(getone);
+    });
+  };
+
+  console.log("데이터", post);
+
+  // const getone = getPost;
+
+  // // console.log(
+  // //   "123",
+  // //   posts?.find((post) => post?.id === getPost?.id)
+  // // );
+  // // const getone = getPost;
+
+  // const getone= posts.find((post) => post?.id === getPost?.id);
+
+  // const getData = async () => {
+  //   const docRef = doc(dbService, "communityPosts", getPost?.id);
+  //   const docSnap = await getDoc(docRef);
+  //   const data = await docSnap.data();
+  //   return data;
+  // };
+
+  // console.log("데이터", post);
+
+  const currentUid = authService.currentUser?.email.toString();
+
+  const LikeRef = doc(dbService, "communityPosts", getPost?.id);
+
+  const Like_Button = async () => {
+    console.log("함수", post.likedUserList);
+    if (post.likedUserList?.includes(currentUid)) {
+      let newarray = [...post.likedUserList].filter((e) => e !== currentUid);
+      console.log("삭제", post.likedUserList);
+      await updateDoc(LikeRef, {
+        likedUserList: newarray,
+      });
+      setState((e) => !e);
+    } else {
+      let newarray = [...post.likedUserList, currentUid];
+
+      console.log("추가", post.likedUserList);
+      console.log("새배열", newarray);
+      await updateDoc(LikeRef, {
+        likedUserList: newarray,
+      });
+      setState((e) => !e);
+    }
+  };
+
+  // const Likecolor = () => {
+  //   if (likedUserList?.includes(currentUid)) {
+  //     return "tomato";
+  //   } else {
+  //     return "#584164";
+  //   }
+  // };
+
+  // 본문 삭제하기.
+  const deletePost = () => {
+    Alert.alert("게시물 삭제", "정말 삭제 하시겠습니까?", [
+      {
+        text: "취소",
+        style: "cancel",
+      },
+      {
+        text: "삭제",
+        style: "destructive",
+        onPress: () => {
+          deleteDoc(doc(dbService, "communityPosts", getone?.id));
+        },
+      },
+    ]);
+  };
+
+  useEffect(() => {
+    console.log("유즈이펙실행");
+    getpost();
+  }, [state]);
 
   return (
     <>
       <Wrap>
         <PostContainer>
           <TitleMbtiBox>
-            <StyledTitle>{getPost?.title}</StyledTitle>
-            <MbtiColorBtn mbti={getPost?.mbti} />
+            <StyledTitle>{post?.title}</StyledTitle>
+            <MbtiColorBtn mbti={post?.mbti} />
           </TitleMbtiBox>
           <NameDateBox>
-            <StyledNickName>{getPost?.nickname}</StyledNickName>
-            <StyledDate> {getDate(getPost?.date)}</StyledDate>
+            <StyledNickName>{post?.nickname}</StyledNickName>
+            <StyledDate> {getDate(post?.date)}</StyledDate>
           </NameDateBox>
-          <StyledContent>{getPost?.content}</StyledContent>
+          <StyledContent>{post?.content}</StyledContent>
         </PostContainer>
+        {/* <TouchableOpacity onPress={deletePost}>
+          <StyledDelete>
+            <MaterialIcons name="delete" size={24} color="black" />
+          </StyledDelete>
+        </TouchableOpacity> */}
+        <LikeButton onPress={Like_Button}>
+          <AntDesign name="heart" size={15} color="tomato" />
+
+          <Text>{post.likedUserList?.length}</Text>
+        </LikeButton>
       </Wrap>
     </>
   );
 }
+
+const LikeButton = styled.TouchableOpacity`
+  width: 50px;
+  height: 30px;
+  border-radius: 25px;
+  background-color: whitesmoke;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 5px;
+  align-items: center;
+`;
 
 const Wrap = styled.View`
   padding: 20px;
@@ -53,7 +175,7 @@ const TitleMbtiBox = styled.View`
 
 const StyledTitle = styled.Text`
   font-weight: 600;
-  font-size: 18px;
+  font-size: 23px;
   margin-right: 10px;
 `;
 
@@ -75,5 +197,5 @@ const StyledNickName = styled.Text`
 `;
 
 const StyledContent = styled.Text`
-  font-size: 17px;
+  font-size: 19px;
 `;

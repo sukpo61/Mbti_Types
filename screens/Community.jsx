@@ -43,25 +43,25 @@ export default function Community({ navigation: { setOptions, reset } }) {
   const [displayed, setDisplayed] = useState(false);
   const [mbti, setMBTI] = useState("");
   const [seeall, setSeeall] = useState(true);
-  const [showButton, setShowButton] = useState(false);
-  const [maxVisibleIndex, setMaxVisibleIndex] = useState(0); // highest visible index currently visible.
-  const [minVisibleIndex, setMinVisibleIndex] = useState(0); // lowest visible index currently visible.
 
   // Scroll Top Btn
 
-  const scrollRef = useRef();
-  const scrolltoTop = () => {
-    scrollRef.current?.scrollTo({
-      y: 0,
-      animated: true,
-    });
-  };
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("보임");
+  //     getPostlist();
+  //   }, [])
+  // );
 
-  // 본문 데이터 불러오기.
+  useEffect(() => {
+    console.log("보임");
+    getPostlist();
+  }, []);
+
   const getPostlist = () => {
     const q = query(
       collection(dbService, "communityPosts"),
-      orderBy("date", "desc")
+      orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
     );
 
     const array = [];
@@ -99,7 +99,6 @@ export default function Community({ navigation: { setOptions, reset } }) {
   useFocusEffect(
     // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
     useCallback(() => {
-      getPostlist();
 
       setOptions({
         headerRight: () => {
@@ -192,6 +191,7 @@ const View = styled.View`
   align-items: center;
   flex: 1;
 `;
+const View = styled.View``;
 const CommunityBtnWrap = styled.View`
   position: absolute;
   margin-right: 20px;

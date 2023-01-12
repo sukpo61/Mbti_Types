@@ -71,7 +71,7 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
         headerRight: () => {
           return (
             <TouchableOpacity style={{ marginRight: 10 }} onPress={logout}>
-              <Text style={{ color: "#312070" }}>로그아웃</Text>
+              <LogoutText style={{ color: "#312070" }}>로그아웃</LogoutText>
             </TouchableOpacity>
           );
         },
@@ -88,8 +88,14 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
   return (
     <>
       <MyPageTitleWrap>
-        <Text>{authService.currentUser?.displayName}님의 MBTI는</Text>
-        <Text>{authService.currentUser?.photoURL}입니다.</Text>
+        <RowText>
+          <Text>{authService.currentUser?.displayName}</Text>
+          <Text>님의 MBTI는</Text>
+        </RowText>
+        <RowText>
+          <MBTIText>{authService.currentUser?.photoURL}</MBTIText>
+          <Text> 입니다.</Text>
+        </RowText>
       </MyPageTitleWrap>
       <PostNav>
         <ComuNav
@@ -112,14 +118,59 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
   );
 }
 
-const Text = styled.Text``;
+const Text = styled.Text`
+  font-size: 20px;
+`;
+const MBTIText = styled(Text)`
+  color: ${(props) => {
+    let mbti = props.children;
+    if (
+      mbti === "ISTP" ||
+      mbti === "ISFP" ||
+      mbti === "ESTP" ||
+      mbti === "ESFP"
+    ) {
+      return "#f0b83f";
+    }
+    if (
+      mbti === "ISTJ" ||
+      mbti === "ISFJ" ||
+      mbti === "ESTJ" ||
+      mbti === "ESFJ"
+    ) {
+      return "#4298B4";
+    }
+    if (
+      mbti === "INFJ" ||
+      mbti === "INFP" ||
+      mbti === "ENFJ" ||
+      mbti === "ENFP"
+    ) {
+      return "#33A474";
+    }
+    if (
+      mbti === "INTJ" ||
+      mbti === "INTP" ||
+      mbti === "ENTJ" ||
+      mbti === "ENTP"
+    ) {
+      return "#88619A";
+    }
+  }};
+`;
+
+const LogoutText = styled.Text``;
+
+const RowText = styled.View`
+  flex-direction: row;
+`;
 
 const MyPageTitleWrap = styled.View`
   display: flex;
   flex-direction: column;
   background-color: #efe8fa;
   height: 112px;
-  padding: 32px;
+  padding: 20px 32px;
   justify-content: space-around;
 `;
 

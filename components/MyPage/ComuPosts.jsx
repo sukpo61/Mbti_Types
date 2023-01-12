@@ -65,7 +65,6 @@ export default function ComuPosts({ children }) {
       setPostlist(array);
     });
   };
-
   return (
     <ScrollView>
       {postlist.map(
