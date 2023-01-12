@@ -14,6 +14,7 @@ import {
   collection,
   doc,
   deleteDoc,
+  where
 } from "firebase/firestore";
 import { dbService } from "../firebase";
 
@@ -33,7 +34,10 @@ export default function CommunityDetail({
 
   // 포스트 불러오기
   const getposts = () => {
-    const q = query(collection(dbService, "communityPosts"));
+    const q = query(
+      collection(dbService, "posts"),
+      where("category", "==", "community")
+    );
     onSnapshot(q, (snapshot) => {
       const posts = snapshot.docs.map((doc) => {
         const newState = {
@@ -57,7 +61,7 @@ export default function CommunityDetail({
         text: "삭제",
         style: "destructive",
         onPress: () => {
-          deleteDoc(doc(dbService, "communityPosts", getPost?.id));
+          deleteDoc(doc(dbService, "posts", getPost?.id));
           reset({
             index: 0,
             routes: [
@@ -110,7 +114,7 @@ export default function CommunityDetail({
   return (
     <>
       <ScrollView>
-        <Post getPost={getPost} />
+        <Post getPost={getPost} posts={posts} />
         <CommentsList getPost={getPost} />
       </ScrollView>
       <CommentAddInput getPost={getPost} />

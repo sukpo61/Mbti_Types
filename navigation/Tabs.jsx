@@ -18,6 +18,7 @@ export default function Tabs() {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
+      initialRouteName="커뮤니티"
       sceneContainerStyle={{ backgroundColor: "white" }}
       screenOptions={{
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
@@ -25,6 +26,7 @@ export default function Tabs() {
         tabBarLabelPosition: "below-icon",
         tabBarLabelPosition: "below-icon",
         headerTitle: "",
+        headerTitleAlign: "center",
         headerStyle: { backgroundColor: "#EFE8FA" },
         tabBarStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,

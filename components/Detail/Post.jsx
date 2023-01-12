@@ -8,6 +8,7 @@ import {
   orderBy,
   updateDoc,
   getDoc,
+  where
 } from "firebase/firestore";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
@@ -17,7 +18,7 @@ import { getDate } from "../../utils";
 import { AntDesign } from "@expo/vector-icons";
 import { authService } from "../../firebase";
 import { dbService } from "../../firebase";
-// import { async } from "@firebase/util";
+import { async } from "@firebase/util";
 
 export default function Post({ getPost }) {
   // console.log("getPost :", getPost);
@@ -26,7 +27,10 @@ export default function Post({ getPost }) {
   const [state, setState] = useState(false);
 
   const getpost = () => {
-    const q = query(collection(dbService, "communityPosts"));
+    const q = query(
+      collection(dbService, "posts"),
+      // where("category", "==", "community")
+    );
     onSnapshot(q, (snapshot) => {
       const posts = snapshot.docs.map((doc) => {
         const newState = {
@@ -64,10 +68,9 @@ export default function Post({ getPost }) {
 
   const currentUid = authService.currentUser?.email.toString();
 
-  const LikeRef = doc(dbService, "communityPosts", getPost?.id);
+  const LikeRef = doc(dbService, "posts", getPost?.id);
 
   const Like_Button = async () => {
-    console.log("함수", post.likedUserList);
     if (post.likedUserList?.includes(currentUid)) {
       let newarray = [...post.likedUserList].filter((e) => e !== currentUid);
       console.log("삭제", post.likedUserList);
@@ -77,9 +80,6 @@ export default function Post({ getPost }) {
       setState((e) => !e);
     } else {
       let newarray = [...post.likedUserList, currentUid];
-
-      console.log("추가", post.likedUserList);
-      console.log("새배열", newarray);
       await updateDoc(LikeRef, {
         likedUserList: newarray,
       });
@@ -106,14 +106,13 @@ export default function Post({ getPost }) {
         text: "삭제",
         style: "destructive",
         onPress: () => {
-          deleteDoc(doc(dbService, "communityPosts", getone?.id));
+          deleteDoc(doc(dbService, "posts", getone?.id));
         },
       },
     ]);
   };
 
   useEffect(() => {
-    console.log("유즈이펙실행");
     getpost();
   }, [state]);
 
@@ -123,7 +122,7 @@ export default function Post({ getPost }) {
         <PostContainer>
           <TitleMbtiBox>
             <StyledTitle>{post?.title}</StyledTitle>
-            <MbtiColorBtnCommunity mbti={post?.mbti} />
+           { getPost.category === "community" ? <MbtiColorBtn mbti={post?.mbti} /> : null }
           </TitleMbtiBox>
           <NameDateBox>
             <StyledNickName>{post?.nickname}</StyledNickName>
