@@ -49,7 +49,7 @@ export default function ComuPosts({ children }) {
     });
   };
 
-  console.log(postlist)
+  console.log(postlist);
   return (
     <ScrollView>
       <Wrap>
@@ -60,7 +60,10 @@ export default function ComuPosts({ children }) {
                 <PostBox
                   onPress={() =>
                     navigate("Stack", {
-                      screen: post.community === "community" ? "CommunityDetail" : "QnADetail",
+                      screen:
+                        post.community === "community"
+                          ? "CommunityDetail"
+                          : "QnADetail",
                       params: { getPost: post },
                     })
                   }
@@ -70,7 +73,6 @@ export default function ComuPosts({ children }) {
                       {post.title}
                     </PostTitle>
                   </PostTitleWrap>
-
                   <PostDetailWrap>
                     <PostdDetaillname>{post.nickname}</PostdDetaillname>
                     <PostDetail>{getDate(post.date)}</PostDetail>
@@ -82,7 +84,13 @@ export default function ComuPosts({ children }) {
                       </LikeButton>
                     </PostDetaillike>
                   </PostDetailWrap>
-                  <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
+                  {post.category === "qna" ? (
+                    <QnABtn>
+                      <QnAText>QnA</QnAText>
+                    </QnABtn>
+                  ) : (
+                    <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
+                  )}
                 </PostBox>
               </View>
             )
@@ -97,7 +105,28 @@ const Wrap = styled.View`
   align-items: center;
   justify-content: center;
 `;
+const QnABtn = styled.View`
+  /* height: 23px;
+  width: 65px; */
+  height: 18px;
+  width: 50px;
+  background-color: #696969;
+  border-radius: 20px;
+  margin-right: 5px;
+  justify-content: center;
+  align-items: center;
+  //추가
+  position: absolute;
+  right: 0;
+`;
 
+const QnAText = styled.Text`
+  color: white;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 2px;
+`;
 const ScrollView = styled.ScrollView`
   width: 100%;
 `;

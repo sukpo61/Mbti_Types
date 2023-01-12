@@ -51,10 +51,7 @@ export default function QnACommentsList({ getPost }) {
     return array;
   };
 
-  const { data: comments, isLoading } = useQuery(
-    "qnaComments",
-    getComments
-  );
+  const { data: comments, isLoading } = useQuery("qnaComments", getComments);
   const postComments = comments?.filter((co) => co.postId === getPost.id);
 
   // 새로고침하기.
@@ -103,11 +100,10 @@ const Wrap = styled.ScrollView`
 `;
 
 const Line = styled.View`
-  width: 95%;
+  width: 100%;
   height: 1px;
   text-align: center;
   background-color: lightgray;
-  margin-top: 10px;
 `;
 
 const CommentsContainer = styled.View`
@@ -117,6 +113,6 @@ const CommentsContainer = styled.View`
 
 const CommentsCount = styled.Text`
   font-size: 15px;
-  margin-bottom: 25px;
-  margin-top: 30px;
+  margin-bottom: 20px;
+  margin-top: 20px;
 `;

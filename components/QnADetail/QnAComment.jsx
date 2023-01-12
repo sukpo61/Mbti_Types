@@ -80,9 +80,10 @@ export default function QnAComment({ comment }) {
   return (
     <CommentBox>
       <NameDateMbtiBox>
-        <Name>{comment.nickname}</Name>
-        <DetailMbtiColorBtn mbti={comment.mbti} />
-        <Date>{getDate(comment.date)}</Date>
+        <InfoTop>
+          <DetailMbtiColorBtn mbti={comment.mbti} />
+          <Name>{comment.nickname}</Name>
+        </InfoTop>
         {user?.email == comment.userId ? (
           <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
             <MaterialCommunityIcons
@@ -113,45 +114,60 @@ export default function QnAComment({ comment }) {
           </BackBlur>
         </Modal>
       </NameDateMbtiBox>
-      {isEdit ? (
-        <EditInput
-          autoFocus
-          onSubmitEditing={() => editMutate(comment.id)}
-          onChangeText={setEditContent}
-          defaultValue={comment.content}
-        />
-      ) : (
-        <CommentText>{comment.content}</CommentText>
-      )}
+      <InfoMiddle>
+        {isEdit ? (
+          <EditInput
+            autoFocus
+            onSubmitEditing={() => editMutate(comment.id)}
+            onChangeText={setEditContent}
+            defaultValue={comment.content}
+          />
+        ) : (
+          <CommentText>{comment.content}</CommentText>
+        )}
+      </InfoMiddle>
+      <Date>{getDate(comment.date)}</Date>
     </CommentBox>
   );
 }
 
+const InfoTop = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+const InfoMiddle = styled.View`
+  width: 90%;
+  flex-direction: row;
+  align-items: center;
+`;
+
 const CommentBox = styled.View`
-  margin-bottom: 20px;
+  min-height: 72px;
+  margin-bottom: 10px;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const NameDateMbtiBox = styled.View`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: 8px;
 `;
 
 const Name = styled.Text`
-  font-size: 21px;
-  font-weight: 500;
-  margin-right: 5px;
+  font-size: 18px;
+  margin-left: 5px;
+  line-height: 24px;
 `;
-
 const Date = styled.Text`
-  font-size: 16px;
+  font-size: 12px;
   color: gray;
   margin-right: 5px;
 `;
 
 const CommentText = styled.Text`
   font-size: 15px;
+  line-height: 18px;
 `;
 
 const EditInput = styled.TextInput`

@@ -17,7 +17,7 @@ import {
   collection,
   orderBy,
   onSnapshot,
-  where
+  where,
 } from "firebase/firestore";
 import MBTIFilter from "../components/global/MBTIFilter";
 import { getDate } from "../utils";
@@ -226,7 +226,8 @@ const MBTIfilterBTn = styled.TouchableOpacity`
 
 const PostBox = styled.TouchableOpacity`
   width: 90%;
-  margin-top: 20px;
+  margin-top: 16px;
+  padding-bottom: 10px;
   border-bottom-color: #c8c8c8;
   border-bottom-width: 0.3px;
 `;

@@ -19,6 +19,7 @@ import Back from "../assets/mypageback.png";
 //   query,
 //   where,
 // } from "firebase/firestore";
+
 import { signOut } from "firebase/auth";
 import { StyleSheet } from "react-native";
 
@@ -136,7 +137,7 @@ const BackImage = styled.Image`
   height: 100%;
   object-fit: cover;
   top: 0;
-  left: -20px;
+  left: -10px;
   z-index: 0;
   opacity: 0.5;
 `;
@@ -196,7 +197,7 @@ const MyPageTitleWrap = styled.View`
   display: flex;
   flex-direction: column;
   height: 112px;
-  padding: 20px 32px;
+  padding: 20px 52px;
   justify-content: space-around;
   opacity: 1;
 `;

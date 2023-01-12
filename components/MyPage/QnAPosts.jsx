@@ -32,7 +32,7 @@ export default function ComuPosts({ children }) {
 
   const getPostlist = () => {
     const q = query(
-      collection(dbService, "communityPosts"),
+      collection(dbService, "posts"),
       orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
     );
 
@@ -80,7 +80,13 @@ export default function ComuPosts({ children }) {
                       </LikeButton>
                     </PostDetaillike>
                   </PostDetailWrap>
-                  <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
+                  {post.category === "qna" ? (
+                    <QnABtn>
+                      <QnAText>QnA</QnAText>
+                    </QnABtn>
+                  ) : (
+                    <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
+                  )}
                 </PostBox>
               </View>
             )
@@ -94,6 +100,27 @@ const Wrap = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+const QnABtn = styled.View`
+  /* height: 23px;
+  width: 65px; */
+  height: 18px;
+  width: 50px;
+  background-color: #696969;
+  border-radius: 20px;
+  margin-right: 5px;
+  justify-content: center;
+  align-items: center;
+  //추가
+  position: absolute;
+  right: 0;
+`;
+const QnAText = styled.Text`
+  color: white;
+  line-height: 15px;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 2px;
 `;
 
 const ScrollView = styled.ScrollView`

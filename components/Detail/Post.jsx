@@ -8,7 +8,7 @@ import {
   orderBy,
   updateDoc,
   getDoc,
-  where
+  where,
 } from "firebase/firestore";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
@@ -28,7 +28,7 @@ export default function Post({ getPost }) {
 
   const getpost = () => {
     const q = query(
-      collection(dbService, "posts"),
+      collection(dbService, "posts")
       // where("category", "==", "community")
     );
     onSnapshot(q, (snapshot) => {
@@ -122,7 +122,9 @@ export default function Post({ getPost }) {
         <PostContainer>
           <TitleMbtiBox>
             <StyledTitle>{post?.title}</StyledTitle>
-           { getPost.category === "community" ? <MbtiColorBtn mbti={post?.mbti} /> : null }
+            {getPost.category === "community" ? (
+              <MbtiColorBtnCommunity mbti={post?.mbti} />
+            ) : null}
           </TitleMbtiBox>
           <NameDateBox>
             <StyledNickName>{post?.nickname}</StyledNickName>

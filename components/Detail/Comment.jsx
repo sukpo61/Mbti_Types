@@ -81,8 +81,8 @@ export default function Comment({ comment }) {
     <CommentBox>
       <NameDateMbtiBox>
         <InfoTop>
-          <Name>{comment.nickname}</Name>
           <DetailMbtiColorBtn mbti={comment.mbti} />
+          <Name>{comment.nickname}</Name>
         </InfoTop>
         {user?.email == comment.userId ? (
           <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
@@ -156,7 +156,8 @@ const NameDateMbtiBox = styled.View`
 const Name = styled.Text`
   font-size: 20px;
   font-weight: 500;
-  margin-right: 15px;
+  margin-left: 5px;
+  line-height: 24px;
 `;
 
 const Date = styled.Text`
