@@ -46,14 +46,10 @@ export default function Stack({
         headerStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,
         headerBackTitleVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => goBack()}>
-            <AntDesign name="left" color="#584164" />
-          </TouchableOpacity>
-        ),
-        headerTitle: () => (
-          <Text>Detail</Text>
-        ),
+        // headerLeft: () => (
+
+        // ),
+        headerTitle: () => "",
         headerRight: () => {
           return (
             <TouchableOpacity onPress={handleAuth}>

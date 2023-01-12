@@ -42,12 +42,12 @@ export default function MbtiColorBtn({ mbti }) {
   // if (mbti === "INFJ" || mbti === "INFP" || mbti === "ENFJ" || mbti === "ENFP") { setMbtiColor("#33A474") }
   // if (mbti === "INTJ" || mbti === "INTP" || mbti === "ENTJ" || mbti === "ENTP") { setMbtiColor("#88619A") }
 
-    return (
-        <MbtiBtn mbtiColor={mbtiColor}>
-            <Mbti>{mbti}</Mbti>
-        </MbtiBtn>
-    )
-};
+  return (
+    <MbtiBtn mbtiColor={mbtiColor}>
+      <Mbti>{mbti}</Mbti>
+    </MbtiBtn>
+  );
+}
 
 const MbtiBtn = styled.View`
   /* height: 23px;
@@ -62,14 +62,12 @@ const MbtiBtn = styled.View`
   //추가
   position: absolute;
   right: 0;
-`
+`;
 
 const Mbti = styled.Text`
   color: white;
-  /* line-height: 25px;
-  font-size: 20px; */
-  line-height: 18px;
+  line-height: 16px;
   font-size: 12px;
   font-weight: bold;
   padding-left: 2px;
-`
+`;
