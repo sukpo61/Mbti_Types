@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import styled from "@emotion/native";
 import {
   ActivityIndicator,
@@ -25,7 +25,9 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 // import { FlatList } from "react-native-gesture-handler";
 
 export default function Community({ navigation: { setOptions, reset } }) {
-  const Text = styled.Text``;
+  const Text = styled.Text`
+    margin-left: 5px;
+  `;
   const MBTI = styled.TouchableOpacity`
     height: 32px;
     display: flex;
@@ -46,17 +48,10 @@ export default function Community({ navigation: { setOptions, reset } }) {
 
   // Scroll Top Btn
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log("보임");
-  //     getPostlist();
-  //   }, [])
-  // );
-
-  useEffect(() => {
-    console.log("보임");
-    getPostlist();
-  }, []);
+  // useEffect(() => {
+  //   console.log("보임");
+  //   getPostlist();
+  // }, []);
 
   const getPostlist = () => {
     const q = query(
@@ -73,6 +68,14 @@ export default function Community({ navigation: { setOptions, reset } }) {
         })
       );
       setPostlist(array);
+    });
+  };
+
+  const scrollRef = useRef();
+  const scrolltoTop = () => {
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
     });
   };
 
@@ -99,6 +102,7 @@ export default function Community({ navigation: { setOptions, reset } }) {
   useFocusEffect(
     // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
     useCallback(() => {
+      getPostlist();
 
       setOptions({
         headerRight: () => {
@@ -152,7 +156,11 @@ export default function Community({ navigation: { setOptions, reset } }) {
                       <PostdDetaillname>{post.nickname}</PostdDetaillname>
                       <PostDetail>{getDate(post.date)}</PostDetail>
                       <PostDetaillike>
-                        <Text>♥+999</Text>
+                        <LikeButton>
+                          <AntDesign name="heart" size={15} color="tomato" />
+
+                          <Text>{post.likedUserList?.length}</Text>
+                        </LikeButton>
                       </PostDetaillike>
                     </PostDetailWrap>
                     <MbtiColorBtn mbti={post.mbti}></MbtiColorBtn>
@@ -172,6 +180,14 @@ export default function Community({ navigation: { setOptions, reset } }) {
   );
 }
 
+const LikeButton = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 5px;
+  align-items: center;
+  margin-bottom: 5px;
+`;
+
 const ScrollView = styled.ScrollView`
   width: 100%;
 `;
@@ -183,6 +199,8 @@ const Wrap = styled.View`
 `;
 const PostdDetaillname = styled.Text`
   margin-right: 10px;
+  line-height: 17px;
+  color: #3b3b3b;
 `;
 const View = styled.View`
   display: flex;
@@ -191,7 +209,6 @@ const View = styled.View`
   align-items: center;
   flex: 1;
 `;
-const View = styled.View``;
 const CommunityBtnWrap = styled.View`
   position: absolute;
   margin-right: 20px;
@@ -236,7 +253,6 @@ const PostTitle = styled.Text`
   width: 85%;
   margin-bottom: 10px;
   font-size: 15px;
-  font-weight: bold;
 `;
 
 const PostDetailWrap = styled.View`
@@ -247,9 +263,11 @@ const PostDetail = styled.Text`
   font-size: 12px;
   margin-right: 5px;
   margin-bottom: 5px;
+  color: #3b3b3b;
 `;
 
 const PostDetaillike = styled.View`
   position: absolute;
   right: 8px;
+  bottom: 0.5px;
 `;

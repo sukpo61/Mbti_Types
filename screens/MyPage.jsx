@@ -8,6 +8,7 @@ import { authService, dbService } from "../firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import ComuPosts from "../components/MyPage/ComuPosts";
 import QnAPosts from "../components/MyPage/QnAPosts";
+import Back from "../assets/mypageback.png";
 
 // import {
 //   collection,
@@ -19,6 +20,7 @@ import QnAPosts from "../components/MyPage/QnAPosts";
 //   where,
 // } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import { StyleSheet } from "react-native";
 
 export default function My({ navigation: { navigate, reset, setOptions } }) {
   const [postlist, setPostlist] = useState([]);
@@ -87,16 +89,20 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
   `;
   return (
     <>
-      <MyPageTitleWrap>
-        <RowText>
-          <Text>{authService.currentUser?.displayName}</Text>
-          <Text>님의 MBTI는</Text>
-        </RowText>
-        <RowText>
-          <MBTIText>{authService.currentUser?.photoURL}</MBTIText>
-          <Text> 입니다.</Text>
-        </RowText>
-      </MyPageTitleWrap>
+      <ImgandText>
+        <BackImage source={require("../assets/mypageback.png")} />
+
+        <MyPageTitleWrap>
+          <RowText>
+            <Text>{authService.currentUser?.displayName}</Text>
+            <Text>님의 MBTI는</Text>
+          </RowText>
+          <RowText>
+            <MBTIText>{authService.currentUser?.photoURL}</MBTIText>
+            <Text> 입니다.</Text>
+          </RowText>
+        </MyPageTitleWrap>
+      </ImgandText>
       <PostNav>
         <ComuNav
           onPress={() => {
@@ -118,6 +124,23 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
   );
 }
 
+// const backImg = styled.img.attrs({ src: Image })`
+//   width: 100px;
+//   height: 100px;
+//   object-fit: cover;
+// `;
+
+const BackImage = styled.Image`
+  position: absolute;
+  width: 40%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: -20px;
+  z-index: 0;
+  opacity: 0.5;
+`;
+
 const Text = styled.Text`
   font-size: 20px;
 `;
@@ -130,7 +153,7 @@ const MBTIText = styled(Text)`
       mbti === "ESTP" ||
       mbti === "ESFP"
     ) {
-      return "#f0b83f";
+      return "#523800";
     }
     if (
       mbti === "ISTJ" ||
@@ -138,7 +161,7 @@ const MBTIText = styled(Text)`
       mbti === "ESTJ" ||
       mbti === "ESFJ"
     ) {
-      return "#4298B4";
+      return "#004a63";
     }
     if (
       mbti === "INFJ" ||
@@ -146,7 +169,7 @@ const MBTIText = styled(Text)`
       mbti === "ENFJ" ||
       mbti === "ENFP"
     ) {
-      return "#33A474";
+      return "#005331";
     }
     if (
       mbti === "INTJ" ||
@@ -154,7 +177,7 @@ const MBTIText = styled(Text)`
       mbti === "ENTJ" ||
       mbti === "ENTP"
     ) {
-      return "#88619A";
+      return "#370050";
     }
   }};
 `;
@@ -163,15 +186,19 @@ const LogoutText = styled.Text``;
 
 const RowText = styled.View`
   flex-direction: row;
+  z-index: 10;
+`;
+const ImgandText = styled.View`
+  background-color: #efe8fa;
 `;
 
 const MyPageTitleWrap = styled.View`
   display: flex;
   flex-direction: column;
-  background-color: #efe8fa;
   height: 112px;
   padding: 20px 32px;
   justify-content: space-around;
+  opacity: 1;
 `;
 
 const PostNav = styled.View`
