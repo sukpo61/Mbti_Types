@@ -17,7 +17,7 @@ export default function CommunityEdit({
   
   // 본문 수정하기.
   const editPost = async () => {
-    await updateDoc(doc(dbService, "communityPosts", getPost.id), {
+    await updateDoc(doc(dbService, "posts", getPost.id), {
       title,
       content,
     });

@@ -17,6 +17,7 @@ import {
   collection,
   orderBy,
   onSnapshot,
+  where
 } from "firebase/firestore";
 import MBTIFilter from "../components/global/MBTIFilter";
 import { getDate } from "../utils";
@@ -28,35 +29,17 @@ export default function Community({ navigation: { setOptions, reset } }) {
   const Text = styled.Text`
     margin-left: 5px;
   `;
-  const MBTI = styled.TouchableOpacity`
-    height: 32px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    ${Text} {
-      font-size: 14px;
-      color: #584164;
-    }
-  `;
 
   const { navigate } = useNavigation();
   const [postlist, setPostlist] = useState([]);
   const [displayed, setDisplayed] = useState(false);
   const [mbti, setMBTI] = useState("");
-  const [seeall, setSeeall] = useState(true);
-
-  // Scroll Top Btn
-
-  // useEffect(() => {
-  //   console.log("보임");
-  //   getPostlist();
-  // }, []);
 
   const getPostlist = () => {
     const q = query(
-      collection(dbService, "communityPosts"),
-      orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
+      collection(dbService, "posts"),
+      orderBy("date", "desc"),
+      where("category", "==", "community")
     );
 
     const array = [];

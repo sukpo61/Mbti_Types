@@ -10,7 +10,7 @@ import DetailMbtiColorBtn from "../global/DetailMbtiColorBtn";
 import { getDate } from "../../utils";
 import { useMutation, useQueryClient } from "react-query";
 
-export default function Comment({ comment }) {
+export default function QnAComment({ comment }) {
   const queryClient = useQueryClient();
   const user = authService.currentUser;
 
@@ -26,7 +26,7 @@ export default function Comment({ comment }) {
 
   // 댓글 수정하기.
   const editComment = async (id) => {
-    await updateDoc(doc(dbService, "communityComments", id), {
+    await updateDoc(doc(dbService, "qnaComments", id), {
       content: editContent,
     });
     setIsEdit(false);
@@ -35,13 +35,13 @@ export default function Comment({ comment }) {
   // 댓글 수정하기.
   const { mutate: editMutate } = useMutation(editComment, {
     onSuccess: () => {
-      queryClient.invalidateQueries("communityComments");
+      queryClient.invalidateQueries("qnaComments");
     },
   });
 
   // 댓글 삭제하기
   const deleteComment = async (id) => {
-    deleteDoc(doc(dbService, "communityComments", id));
+    deleteDoc(doc(dbService, "qnaComments", id));
     // const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
     //   {
     //     text: "취소",
@@ -70,7 +70,7 @@ export default function Comment({ comment }) {
   const deleteMutate = useMutation(deleteComment, {
     onSuccess: () => {
       // setIsOpenModal(false);
-      queryClient.invalidateQueries("communityComments");
+      queryClient.invalidateQueries("qnaComments");
       // refetch()
       // onRefresh()
       // queryClient.refetchQueries("communityComments");

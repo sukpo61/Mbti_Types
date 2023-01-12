@@ -1,45 +1,238 @@
-import React from "react";
-import styled from "styled-components/native";
-import { SafeAreaView } from "react-native";
-import { Header } from "react-native/Libraries/NewAppScreen";
+import { useCallback, useEffect, useState, useRef } from "react";
+import styled from "@emotion/native";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollY,
+  Text,
+  FlatList,
+} from "react-native";
+import { dbService } from "../firebase";
+import { AntDesign } from "@expo/vector-icons";
+import { authService } from "../firebase";
 
-export default function Community() {
+import {
+  query,
+  getDocs,
+  collection,
+  orderBy,
+  onSnapshot,
+  where
+} from "firebase/firestore";
+import MBTIFilter from "../components/global/MBTIFilter";
+import { getDate } from "../utils";
+import MbtiColorBtn from "../components/global/MbtiColorBtn";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+// import { FlatList } from "react-native-gesture-handler";
+
+export default function QnA({ navigation: { setOptions, reset } }) {
+  const Text = styled.Text`
+    margin-left: 5px;
+  `;
+
+  const { navigate } = useNavigation();
+  const [postlist, setPostlist] = useState([]);
+  const [displayed, setDisplayed] = useState(false);
+  const [mbti, setMBTI] = useState("");
+
+  const getPostlist = () => {
+    const q = query(
+      collection(dbService, "posts"),
+      orderBy("date", "desc"),
+      where("category", "==", "qna")
+    );
+
+    const array = [];
+    onSnapshot(q, (snapshot) => {
+      snapshot.docs.map((doc) =>
+        array.push({
+          id: doc.id,
+          ...doc.data(),
+        })
+      );
+      setPostlist(array);
+    });
+  };
+
+  const scrollRef = useRef();
+  const scrolltoTop = () => {
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  };
+
+  const mbticheck = (post) => {
+    if (mbti === "") {
+      return true;
+    } else {
+      return post.mbti === mbti;
+    }
+  };
+
+  const handleAddBtn = () => {
+    if (!authService.currentUser) {
+      navigate("Stack", {
+        screen: "Login",
+      });
+    } else {
+      navigate("Stack", {
+        screen: "QnAAdd",
+      });
+    }
+  };
+  //CommuityHeader
+  useFocusEffect(
+    // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
+    useCallback(() => {
+      getPostlist();
+
+      setOptions({
+        headerRight: () => {
+          return (
+            <>
+              <MBTIfilterBTn
+                onPress={() => {
+                  setDisplayed(!displayed);
+                }}
+              >
+                <AntDesign name="bars" size={25} color="#312070" />
+              </MBTIfilterBTn>
+            </>
+          );
+        },
+      });
+    }, [])
+  );
   return (
-    <SafeAreaView>
-      <CommunityTitleContainer>
-        <CommunityTitle>상황문답</CommunityTitle>
-      </CommunityTitleContainer>
+    <View>
+      <CommunityBtnWrap>
+        <CommunityAddBtn onPress={handleAddBtn}>
+          <AntDesign name="edit" size={20} color="#312070" />
+        </CommunityAddBtn>
+        <CommunityTopBtn onPress={scrolltoTop}>
+          <AntDesign name="up" size={20} color="#312070" />
+        </CommunityTopBtn>
+      </CommunityBtnWrap>
 
-      <PostBox>
-        <PostTitleWrap>
-          <PostTitle>상황문답 페이지 타이틀</PostTitle>
-        </PostTitleWrap>
+      <ScrollView ref={scrollRef}>
+        <Wrap>
+          {postlist.map(
+            (post, index) =>
+              mbticheck(post) && (
+                <View key={index}>
+                  <PostBox
+                    onPress={() =>
+                      navigate("Stack", {
+                        screen: "QnADetail",
+                        params: { getPost: post },
+                      })
+                    }
+                  >
+                    <PostTitleWrap>
+                      <PostTitle numberOfLines={1} ellipsizeMode="tail">
+                        {post.title}
+                      </PostTitle>
+                    </PostTitleWrap>
 
-        <PostDetailWrap>
-          <PostDetail>닉네임</PostDetail>
-          <PostDetail>23.01.01</PostDetail>
-        </PostDetailWrap>
-      </PostBox>
-    </SafeAreaView>
+                    <PostDetailWrap>
+                      <PostdDetaillname>{post.nickname}</PostdDetaillname>
+                      <PostDetail>{getDate(post.date)}</PostDetail>
+                      <PostDetaillike>
+                        <LikeButton>
+                          <AntDesign name="heart" size={15} color="tomato" />
+
+                          <Text>{post.likedUserList?.length}</Text>
+                        </LikeButton>
+                      </PostDetaillike>
+                    </PostDetailWrap>
+                  </PostBox>
+                </View>
+              )
+          )}
+        </Wrap>
+      </ScrollView>
+
+      <MBTIFilter
+        SetDisplayed={setDisplayed}
+        Displayed={displayed}
+        SetMBTI={setMBTI}
+      ></MBTIFilter>
+    </View>
   );
 }
 
-const CommunityTitleContainer = styled.View`
-  margin-bottom: 30px;
-  font-weight: bold;
+const LikeButton = styled.TouchableOpacity`
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 5px;
+  align-items: center;
+  margin-bottom: 5px;
 `;
 
-const CommunityTitle = styled.Text`
-  font-size: 20px;
+const ScrollView = styled.ScrollView`
+  width: 100%;
 `;
-const PostBox = styled.View`
-  margin-left: 10px;
+const Wrap = styled.View`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const PostdDetaillname = styled.Text`
+  margin-right: 10px;
+  line-height: 17px;
+  color: #3b3b3b;
+`;
+const View = styled.View`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
+const CommunityBtnWrap = styled.View`
+  position: absolute;
+  margin-right: 20px;
   margin-bottom: 20px;
-  border-bottom-color: gray;
-  border-bottom-width: 1px;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+`;
+const CommunityTopBtn = styled.TouchableOpacity`
+  width: 40px;
+  height: 40px;
+  background-color: #efe8fa;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+`;
+
+const CommunityAddBtn = styled.TouchableOpacity`
+  margin-bottom: 10px;
+  width: 40px;
+  height: 40px;
+  background-color: #efe8fa;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+`;
+
+const MBTIfilterBTn = styled.TouchableOpacity`
+  margin-right: 10px;
+  position: absolute;
+  right: 20px;
+`;
+
+const PostBox = styled.TouchableOpacity`
+  width: 90%;
+  margin-top: 20px;
+  border-bottom-color: #c8c8c8;
+  border-bottom-width: 0.3px;
 `;
 const PostTitleWrap = styled.View``;
 const PostTitle = styled.Text`
+  width: 85%;
   margin-bottom: 10px;
   font-size: 15px;
 `;
@@ -52,4 +245,11 @@ const PostDetail = styled.Text`
   font-size: 12px;
   margin-right: 5px;
   margin-bottom: 5px;
+  color: #3b3b3b;
+`;
+
+const PostDetaillike = styled.View`
+  position: absolute;
+  right: 8px;
+  bottom: 0.5px;
 `;

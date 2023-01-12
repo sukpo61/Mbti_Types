@@ -27,7 +27,7 @@ export default function CommunityAdd({ navigation: { navigate, reset } }) {
 
   //상황질문 본문 추가하기
   const addQna = async () => {
-    await addDoc(collection(dbService, "communityPosts"), newQna);
+    await addDoc(collection(dbService, "posts"), newQna);
     setTitle("");
     setContent("");
     reset({

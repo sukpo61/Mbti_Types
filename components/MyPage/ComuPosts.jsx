@@ -32,7 +32,7 @@ export default function ComuPosts({ children }) {
 
   const getPostlist = () => {
     const q = query(
-      collection(dbService, "communityPosts"),
+      collection(dbService, "posts"),
       orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
     );
 
@@ -48,6 +48,8 @@ export default function ComuPosts({ children }) {
       setPostlist(array);
     });
   };
+
+  console.log(postlist)
   return (
     <ScrollView>
       <Wrap>
@@ -58,7 +60,7 @@ export default function ComuPosts({ children }) {
                 <PostBox
                   onPress={() =>
                     navigate("Stack", {
-                      screen: "CommunityDetail",
+                      screen: post.community === "community" ? "CommunityDetail" : "QnADetail",
                       params: { getPost: post },
                     })
                   }
