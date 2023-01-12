@@ -202,7 +202,7 @@ export default function Login({
           <LoginText>Sign up</LoginText>
         </LoginButton>
         <RegisterButton onPress={handleLogin}>
-          <RegisterText>Submmit</RegisterText>
+          <RegisterText>Submit</RegisterText>
         </RegisterButton>
       </ButtonsWrap>
     </View>

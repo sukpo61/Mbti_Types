@@ -18,15 +18,13 @@ export default function Tabs() {
   const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
-      initialRouteName="커뮤니티"
       sceneContainerStyle={{ backgroundColor: "white" }}
       screenOptions={{
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "below-icon",
         tabBarLabelPosition: "below-icon",
-        // headerTitle: "",
-        headerTitleAlign: "center",
+        headerTitle: "",
         headerStyle: { backgroundColor: "#EFE8FA" },
         tabBarStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,
@@ -35,7 +33,6 @@ export default function Tabs() {
     >
       <Tab.Screen
         options={{
-          headerTitle: "Qna",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="comment-question-outline"
@@ -49,7 +46,6 @@ export default function Tabs() {
       />
       <Tab.Screen
         options={{
-          headerTitle: "Community",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" size={size} color={color} />
           ),
@@ -59,7 +55,6 @@ export default function Tabs() {
       />
       <Tab.Screen
         options={{
-          headerTitle: "MyPage",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="user" size={size} color={color} />
           ),

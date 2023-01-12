@@ -140,7 +140,8 @@ const View = styled.View`
 
 const PostBox = styled.TouchableOpacity`
   width: 90%;
-  margin-top: 20px;
+  margin-top: 16px;
+  padding-bottom: 10px;
   border-bottom-color: #c8c8c8;
   border-bottom-width: 0.2px;
 `;

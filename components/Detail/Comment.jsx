@@ -41,25 +41,25 @@ export default function Comment({ comment }) {
 
   // 댓글 삭제하기
   const deleteComment = async (id) => {
-    // deleteDoc(doc(dbService, "communityComments", id));
-    const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
-      {
-        text: "취소",
-        style: "cancel",
-        onPress: () => {
-          setIsOpenModal(false);
-        },
-      },
-      {
-        text: "삭제",
-        style: "destructive",
-        onPress: () => {
-          setIsOpenModal(false);
-          deleteDoc(doc(dbService, "communityComments", id));
-          return "delete";
-        },
-      },
-    ]);
+    deleteDoc(doc(dbService, "communityComments", id));
+    // const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
+    //   {
+    //     text: "취소",
+    //     style: "cancel",
+    //     onPress: () => {
+    //       setIsOpenModal(false);
+    //     },
+    //   },
+    //   {
+    //     text: "삭제",
+    //     style: "destructive",
+    //     onPress: () => {
+    //       setIsOpenModal(false);
+    //       deleteDoc(doc(dbService, "communityComments", id));
+    //       return "delete";
+    //     },
+    //   },
+    // ]);
     // console.log(test)
     // if (test === 'delete') {
     //   deleteDoc(doc(dbService, "communityComments", id));
@@ -80,9 +80,10 @@ export default function Comment({ comment }) {
   return (
     <CommentBox>
       <NameDateMbtiBox>
-        <Name>{comment.nickname}</Name>
-        <DetailMbtiColorBtn mbti={comment.mbti} />
-        <Date>{getDate(comment.date)}</Date>
+        <InfoTop>
+          <Name>{comment.nickname}</Name>
+          <DetailMbtiColorBtn mbti={comment.mbti} />
+        </InfoTop>
         {user?.email == comment.userId ? (
           <ToggleBtn onPress={() => setIsOpenModal(!isOpenModal)}>
             <MaterialCommunityIcons
@@ -113,45 +114,60 @@ export default function Comment({ comment }) {
           </BackBlur>
         </Modal>
       </NameDateMbtiBox>
-      {isEdit ? (
-        <EditInput
-          autoFocus
-          onSubmitEditing={() => editMutate(comment.id)}
-          onChangeText={setEditContent}
-          defaultValue={comment.content}
-        />
-      ) : (
-        <CommentText>{comment.content}</CommentText>
-      )}
+      <InfoMiddle>
+        {isEdit ? (
+          <EditInput
+            autoFocus
+            onSubmitEditing={() => editMutate(comment.id)}
+            onChangeText={setEditContent}
+            defaultValue={comment.content}
+          />
+        ) : (
+          <CommentText>{comment.content}</CommentText>
+        )}
+      </InfoMiddle>
+      <Date>{getDate(comment.date)}</Date>
     </CommentBox>
   );
 }
+const InfoTop = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+const InfoMiddle = styled.View`
+  width: 90%;
+  flex-direction: row;
+  align-items: center;
+`;
 
 const CommentBox = styled.View`
-  margin-bottom: 20px;
+  min-height: 72px;
+  margin-bottom: 10px;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const NameDateMbtiBox = styled.View`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: 8px;
 `;
 
 const Name = styled.Text`
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 500;
-  margin-right: 5px;
+  margin-right: 15px;
 `;
 
 const Date = styled.Text`
-  font-size: 16px;
+  font-size: 12px;
   color: gray;
   margin-right: 5px;
 `;
 
 const CommentText = styled.Text`
   font-size: 15px;
+  line-height: 18px;
 `;
 
 const EditInput = styled.TextInput`

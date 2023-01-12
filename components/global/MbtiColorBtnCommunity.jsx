@@ -1,7 +1,7 @@
 import styled from "@emotion/native";
 
 // props로 mbti 데이터를 넘겨받아야 함.
-export default function MbtiColorBtn({ mbti }) {
+export default function MbtiColorBtnCommunity({ mbti }) {
   let mbtiColor = "";
   if (
     mbti === "ISTP" ||
@@ -42,12 +42,12 @@ export default function MbtiColorBtn({ mbti }) {
   // if (mbti === "INFJ" || mbti === "INFP" || mbti === "ENFJ" || mbti === "ENFP") { setMbtiColor("#33A474") }
   // if (mbti === "INTJ" || mbti === "INTP" || mbti === "ENTJ" || mbti === "ENTP") { setMbtiColor("#88619A") }
 
-    return (
-        <MbtiBtn mbtiColor={mbtiColor}>
-            <Mbti>{mbti}</Mbti>
-        </MbtiBtn>
-    )
-};
+  return (
+    <MbtiBtn mbtiColor={mbtiColor}>
+      <Mbti>{mbti}</Mbti>
+    </MbtiBtn>
+  );
+}
 
 const MbtiBtn = styled.View`
   height: 23px;
@@ -57,12 +57,13 @@ const MbtiBtn = styled.View`
   margin-right: 5px;
   justify-content: center;
   align-items: center;
-`
+  margin-top: 5px;
+`;
 
 const Mbti = styled.Text`
   color: white;
-  line-height: 25px;
-  font-size: 20px;
+  line-height: 23px;
+  font-size: 18px;
   font-weight: bold;
   padding-left: 2px;
-`
+`;

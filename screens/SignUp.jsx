@@ -242,7 +242,7 @@ export default function SignUp({
             <LoginText>Login</LoginText>
           </LoginButton>
           <RegisterButton onPress={handleRegister}>
-            <RegisterText>Submmit</RegisterText>
+            <RegisterText>Submit</RegisterText>
           </RegisterButton>
         </ButtonsWrap>
       </ScrollView>

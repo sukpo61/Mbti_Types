@@ -12,12 +12,12 @@ import {
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import MbtiColorBtn from "../global/MbtiColorBtn";
+import MbtiColorBtnCommunity from "../global/MbtiColorBtnCommunity";
 import { getDate } from "../../utils";
 import { AntDesign } from "@expo/vector-icons";
 import { authService } from "../../firebase";
 import { dbService } from "../../firebase";
-import { async } from "@firebase/util";
+// import { async } from "@firebase/util";
 
 export default function Post({ getPost }) {
   // console.log("getPost :", getPost);
@@ -87,13 +87,13 @@ export default function Post({ getPost }) {
     }
   };
 
-  // const Likecolor = () => {
-  //   if (likedUserList?.includes(currentUid)) {
-  //     return "tomato";
-  //   } else {
-  //     return "#584164";
-  //   }
-  // };
+  const Likecolor = () => {
+    if (post.likedUserList?.includes(currentUid)) {
+      return "tomato";
+    } else {
+      return "#584164";
+    }
+  };
 
   // 본문 삭제하기.
   const deletePost = () => {
@@ -123,7 +123,7 @@ export default function Post({ getPost }) {
         <PostContainer>
           <TitleMbtiBox>
             <StyledTitle>{post?.title}</StyledTitle>
-            <MbtiColorBtn mbti={post?.mbti} />
+            <MbtiColorBtnCommunity mbti={post?.mbti} />
           </TitleMbtiBox>
           <NameDateBox>
             <StyledNickName>{post?.nickname}</StyledNickName>
@@ -136,15 +136,30 @@ export default function Post({ getPost }) {
             <MaterialIcons name="delete" size={24} color="black" />
           </StyledDelete>
         </TouchableOpacity> */}
-        <LikeButton onPress={Like_Button}>
-          <AntDesign name="heart" size={15} color="tomato" />
-
-          <Text>{post.likedUserList?.length}</Text>
-        </LikeButton>
       </Wrap>
+      <LikeButtonWrap>
+        {!authService.currentUser ? (
+          <LikePreview>
+            <AntDesign name="heart" size={15} color="tomato" />
+            <Text>{post.likedUserList?.length}</Text>
+          </LikePreview>
+        ) : (
+          <LikeButton onPress={Like_Button}>
+            <AntDesign name="heart" size={15} color={Likecolor()} />
+
+            <Text>{post.likedUserList?.length}</Text>
+          </LikeButton>
+        )}
+      </LikeButtonWrap>
     </>
   );
 }
+
+const LikeButtonWrap = styled.View`
+  width: 100%;
+  flex-direction: row;
+  padding: 10px 20px;
+`;
 
 const LikeButton = styled.TouchableOpacity`
   width: 50px;
@@ -156,10 +171,20 @@ const LikeButton = styled.TouchableOpacity`
   padding: 0 5px;
   align-items: center;
 `;
+const LikePreview = styled.View`
+  width: 50px;
+  height: 30px;
+  border-radius: 25px;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 0 5px;
+  align-items: center;
+`;
 
 const Wrap = styled.View`
-  padding: 20px;
+  padding: 10px 20px;
   align-items: center;
+  min-height: 200px;
 `;
 
 const PostContainer = styled.View`
@@ -169,11 +194,11 @@ const PostContainer = styled.View`
 
 const TitleMbtiBox = styled.View`
   flex-direction: row;
-  align-items: center;
   margin-bottom: 5px;
 `;
 
 const StyledTitle = styled.Text`
+  width: 80%;
   font-weight: 600;
   font-size: 23px;
   margin-right: 10px;
