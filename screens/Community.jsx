@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "@emotion/native";
 import { SCREEN_HEIGHT } from "../utils";
 import {
@@ -49,14 +49,19 @@ export default function Community({ navigation: { setOptions, reset } }) {
   const [displayed, setDisplayed] = useState(false);
   const [mbti, setMBTI] = useState("");
   const [seeall, setSeeall] = useState(true);
+  const [state, setState] = useState(false);
 
   const user = authService.currentUser;
 
-  useEffect(() => {
-    console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
-  }, [ScrollY]);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("보임");
+  //     getPostlist();
+  //   }, [])
+  // );
 
   useEffect(() => {
+    console.log("보임");
     getPostlist();
   }, []);
 
@@ -129,7 +134,7 @@ export default function Community({ navigation: { setOptions, reset } }) {
                   onPress={() =>
                     navigate("Stack", {
                       screen: "CommunityDetail",
-                      params: { getPost: post },
+                      params: { getPost: post, setState },
                     })
                   }
                 >

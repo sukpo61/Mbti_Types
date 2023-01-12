@@ -10,7 +10,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 export default function CommunityDetail({
   navigation: { setOptions, reset },
   route: {
-    params: { getPost },
+    params: { getPost, setState },
   },
 }) {
   useFocusEffect(
@@ -35,7 +35,7 @@ export default function CommunityDetail({
   return (
     <>
       <ScrollView>
-        <Post getPost={getPost} />
+        <Post getPost={getPost} setState={setState} />
         <CommentsList getPostId={getPost.id} />
       </ScrollView>
       <CommentAddInput getPostId={getPost.id} />
