@@ -56,7 +56,7 @@ const MbtiBtn = styled.View`
 const Mbti = styled.Text`
   color: white;
   line-height: 17px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
   padding-left: 2px;
 `;

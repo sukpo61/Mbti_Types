@@ -43,8 +43,8 @@ export default function MbtiColorBtnCommunity({ mbti }) {
 }
 
 const MbtiBtn = styled.View`
-  height: 23px;
-  width: 65px;
+  height: 20px;
+  width: 56px;
   background-color: ${(props) => props.mbtiColor};
   border-radius: 20px;
   margin-right: 5px;
@@ -55,7 +55,7 @@ const MbtiBtn = styled.View`
 
 const Mbti = styled.Text`
   color: white;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
   padding-left: 2px;
 `;

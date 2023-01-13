@@ -199,6 +199,7 @@ const ScrollView = styled.ScrollView`
   width: 100%;
 `;
 const Wrap = styled.View`
+  padding-top: 10px;
   width: 100%;
   display: flex;
   align-items: center;

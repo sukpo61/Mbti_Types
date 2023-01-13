@@ -114,8 +114,8 @@ const InfoMiddle = styled.View`
 `;
 
 const CommentBox = styled.View`
-  min-height: 72px;
-  margin-bottom: 10px;
+  min-height: 60px;
+  margin-bottom: 24px;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -127,9 +127,8 @@ const NameDateMbtiBox = styled.View`
 `;
 
 const Name = styled.Text`
-  font-size: 18px;
+  font-size: 14px;
   margin-left: 5px;
-  line-height: 24px;
 `;
 const Date = styled.Text`
   font-size: 12px;
@@ -138,7 +137,7 @@ const Date = styled.Text`
 `;
 
 const CommentText = styled.Text`
-  font-size: 15px;
+  font-size: 12px;
   line-height: 18px;
 `;
 
@@ -157,7 +156,7 @@ const ToggleBtn = styled.TouchableOpacity`
 
 const ToggleText = styled.Text`
   padding: 3px 10px;
-  font-size: 20px;
+  font-size: 14px;
 `;
 
 const BackBlur = styled.TouchableOpacity`
@@ -169,6 +168,7 @@ const EditDeleteBox = styled.View`
   height: 130px;
   width: 100%;
   position: absolute;
+  border-radius: 20px 20px 0px 0px;
   bottom: 0;
   background-color: white;
   justify-content: center;

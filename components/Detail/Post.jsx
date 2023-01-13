@@ -125,8 +125,8 @@ export default function Post({ getPost }) {
 }
 
 const QnaBtn = styled.View`
-  height: 23px;
-  width: 65px;
+  height: 20px;
+  width: 56px;
   background-color: #696969;
   border-radius: 20px;
   margin-right: 5px;
@@ -137,7 +137,7 @@ const QnaBtn = styled.View`
 
 const QnAText = styled.Text`
   color: white;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
   padding-left: 2px;
 `;
@@ -187,7 +187,7 @@ const TitleMbtiBox = styled.View`
 const StyledTitle = styled.Text`
   width: 80%;
   font-weight: 600;
-  font-size: 23px;
+  font-size: 18px;
   margin-right: 10px;
 `;
 
@@ -204,10 +204,10 @@ const StyledDate = styled.Text`
 
 const StyledNickName = styled.Text`
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 5px;
 `;
 
 const StyledContent = styled.Text`
-  font-size: 19px;
+  font-size: 14px;
 `;
