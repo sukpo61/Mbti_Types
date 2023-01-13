@@ -30,7 +30,6 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
   const logout = () => {
     signOut(authService)
       .then(() => {
-        console.log("로그아웃 성공");
         reset({
           index: 0,
           routes: [
@@ -74,7 +73,7 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
         headerRight: () => {
           return (
             <TouchableOpacity style={{ marginRight: 10 }} onPress={logout}>
-              <LogoutText style={{ color: "#312070" }}>로그아웃</LogoutText>
+              <LogoutText style={{ color: "#312070" }}>{!authService.currentUser ? "로그인" : "로그아웃"}</LogoutText>
             </TouchableOpacity>
           );
         },

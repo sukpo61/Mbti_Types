@@ -6,11 +6,12 @@ import {
   ScrollY,
   Text,
   FlatList,
+  TouchableOpacity
 } from "react-native";
 import { dbService } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
 import { authService } from "../firebase";
-
+import { signOut } from "firebase/auth";
 import {
   query,
   getDocs,
@@ -81,29 +82,49 @@ export default function QnA({ navigation: { setOptions, reset } }) {
       });
     }
   };
+
+  const logout = () => {
+    signOut(authService)
+      .then(() => {
+        console.log("로그아웃 성공");
+        reset({
+          index: 0,
+          routes: [
+            {
+              name: "Tabs",
+              params: {
+                screen: "커뮤니티",
+              },
+            },
+          ],
+        });
+      })
+      .catch((err) => alert(err));
+  };
+
+  const Login = () => {
+    navigate("Stack", {
+      screen: "Login",
+    });
+  };
+
   //CommuityHeader
   useFocusEffect(
     // 비로그인 상태에서 마이페이지 접근 시 로그인화면으로 이동하고, 뒤로가기 시 무비탭
     useCallback(() => {
       getPostlist();
-
       setOptions({
         headerRight: () => {
           return (
-            <>
-              <MBTIfilterBTn
-                onPress={() => {
-                  setDisplayed(!displayed);
-                }}
-              >
-                <AntDesign name="bars" size={25} color="#312070" />
-              </MBTIfilterBTn>
-            </>
+            <TouchableOpacity style={{ marginRight: 10 }} onPress={!authService.currentUser ? Login : logout}>
+              <LogoutText style={{ color: "#312070" }}>{!authService.currentUser ? "로그인" : "로그아웃"}</LogoutText>
+            </TouchableOpacity>
           );
         },
       });
     }, [])
   );
+
   return (
     <View>
       <CommunityBtnWrap>
@@ -162,6 +183,7 @@ export default function QnA({ navigation: { setOptions, reset } }) {
   );
 }
 
+const LogoutText = styled.Text``;
 const LikeButton = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-around;
