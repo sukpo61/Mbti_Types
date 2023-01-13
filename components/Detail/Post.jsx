@@ -5,10 +5,7 @@ import {
   collection,
   doc,
   deleteDoc,
-  orderBy,
   updateDoc,
-  getDoc,
-  where,
 } from "firebase/firestore";
 import { Text, TouchableOpacity, Alert, View } from "react-native";
 import styled from "@emotion/native";
@@ -21,16 +18,11 @@ import { dbService } from "../../firebase";
 import { async } from "@firebase/util";
 
 export default function Post({ getPost }) {
-  // console.log("getPost :", getPost);
-
   const [post, setPost] = useState(getPost);
   const [state, setState] = useState(false);
 
   const getpost = () => {
-    const q = query(
-      collection(dbService, "posts")
-      // where("category", "==", "community")
-    );
+    const q = query(collection(dbService, "posts"));
     onSnapshot(q, (snapshot) => {
       const posts = snapshot.docs.map((doc) => {
         const newState = {
@@ -39,32 +31,10 @@ export default function Post({ getPost }) {
         };
         return newState;
       });
-      // console.log("post", posts);
       const getone = posts.find((post) => post?.id === getPost?.id);
       setPost(getone);
     });
   };
-
-  console.log("데이터", post);
-
-  // const getone = getPost;
-
-  // // console.log(
-  // //   "123",
-  // //   posts?.find((post) => post?.id === getPost?.id)
-  // // );
-  // // const getone = getPost;
-
-  // const getone= posts.find((post) => post?.id === getPost?.id);
-
-  // const getData = async () => {
-  //   const docRef = doc(dbService, "communityPosts", getPost?.id);
-  //   const docSnap = await getDoc(docRef);
-  //   const data = await docSnap.data();
-  //   return data;
-  // };
-
-  // console.log("데이터", post);
 
   const currentUid = authService.currentUser?.email.toString();
 
@@ -73,7 +43,6 @@ export default function Post({ getPost }) {
   const Like_Button = async () => {
     if (post.likedUserList?.includes(currentUid)) {
       let newarray = [...post.likedUserList].filter((e) => e !== currentUid);
-      console.log("삭제", post.likedUserList);
       await updateDoc(LikeRef, {
         likedUserList: newarray,
       });
@@ -136,11 +105,6 @@ export default function Post({ getPost }) {
           </NameDateBox>
           <StyledContent>{post?.content}</StyledContent>
         </PostContainer>
-        {/* <TouchableOpacity onPress={deletePost}>
-          <StyledDelete>
-            <MaterialIcons name="delete" size={24} color="black" />
-          </StyledDelete>
-        </TouchableOpacity> */}
       </Wrap>
       <LikeButtonWrap>
         {!authService.currentUser ? (

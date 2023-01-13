@@ -2,23 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { TouchableOpacity, View } from "react-native";
 import styled from "@emotion/native";
 import { useFocusEffect } from "@react-navigation/native";
-// import { GREEN_COLOR, YELLOW_COLOR } from "../colors";
 
 import { authService, dbService } from "../firebase";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import ComuPosts from "../components/MyPage/ComuPosts";
 import QnAPosts from "../components/MyPage/QnAPosts";
 import Back from "../assets/mypageback.png";
-
-// import {
-//   collection,
-//   doc,
-//   getDocs,
-//   onSnapshot,
-//   orderBy,
-//   query,
-//   where,
-// } from "firebase/firestore";
 
 import { signOut } from "firebase/auth";
 import { StyleSheet } from "react-native";
@@ -73,7 +62,9 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
         headerRight: () => {
           return (
             <TouchableOpacity style={{ marginRight: 10 }} onPress={logout}>
-              <LogoutText style={{ color: "#312070" }}>{!authService.currentUser ? "로그인" : "로그아웃"}</LogoutText>
+              <LogoutText style={{ color: "#312070" }}>
+                {!authService.currentUser ? "로그인" : "로그아웃"}
+              </LogoutText>
             </TouchableOpacity>
           );
         },
@@ -123,12 +114,6 @@ export default function My({ navigation: { navigate, reset, setOptions } }) {
     </>
   );
 }
-
-// const backImg = styled.img.attrs({ src: Image })`
-//   width: 100px;
-//   height: 100px;
-//   object-fit: cover;
-// `;
 
 const BackImage = styled.Image`
   position: absolute;
@@ -224,5 +209,3 @@ const LikeNav = styled.TouchableOpacity`
 `;
 
 const LogoutBox = styled.View``;
-
-//마이페이지 start

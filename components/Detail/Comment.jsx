@@ -42,38 +42,12 @@ export default function Comment({ comment }) {
   // 댓글 삭제하기
   const deleteComment = async (id) => {
     deleteDoc(doc(dbService, "communityComments", id));
-    // const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
-    //   {
-    //     text: "취소",
-    //     style: "cancel",
-    //     onPress: () => {
-    //       setIsOpenModal(false);
-    //     },
-    //   },
-    //   {
-    //     text: "삭제",
-    //     style: "destructive",
-    //     onPress: () => {
-    //       setIsOpenModal(false);
-    //       deleteDoc(doc(dbService, "communityComments", id));
-    //       return "delete";
-    //     },
-    //   },
-    // ]);
-    // console.log(test)
-    // if (test === 'delete') {
-    //   deleteDoc(doc(dbService, "communityComments", id));
-    // }
   };
 
   // FIXME: 왜 삭제만 실시간 업데이트가 안 될까???
   const deleteMutate = useMutation(deleteComment, {
     onSuccess: () => {
-      // setIsOpenModal(false);
       queryClient.invalidateQueries("communityComments");
-      // refetch()
-      // onRefresh()
-      // queryClient.refetchQueries("communityComments");
     },
   });
 
@@ -105,7 +79,6 @@ export default function Comment({ comment }) {
                 <Feather name="edit" size={22} color="black" />
                 <ToggleText>댓글 수정</ToggleText>
               </EditDeleteBtn>
-              {/* <EditDeleteBtn onPress={() => deleteMutate(comment.id,{onSuccess: () => queryClient.invalidateQueries("communityComments")})}> */}
               <EditDeleteBtn onPress={() => deleteMutate.mutate(comment.id)}>
                 <FontAwesome name="trash-o" size={25} color="black" />
                 <ToggleText style={{ paddingLeft: 12 }}>댓글 삭제</ToggleText>
@@ -117,7 +90,6 @@ export default function Comment({ comment }) {
       <InfoMiddle>
         {isEdit ? (
           <EditInput
-            multiline={true}
             autoFocus
             onSubmitEditing={() => editMutate(comment.id)}
             onChangeText={setEditContent}

@@ -6,7 +6,7 @@ import {
   ScrollY,
   Text,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { dbService } from "../firebase";
 import { AntDesign } from "@expo/vector-icons";
@@ -24,7 +24,6 @@ import MBTIFilter from "../components/global/MBTIFilter";
 import { getDate } from "../utils";
 import MbtiColorBtn from "../components/global/MbtiColorBtn";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-// import { FlatList } from "react-native-gesture-handler";
 
 export default function QnA({ navigation: { setOptions, reset } }) {
   const Text = styled.Text`
@@ -86,7 +85,6 @@ export default function QnA({ navigation: { setOptions, reset } }) {
   const logout = () => {
     signOut(authService)
       .then(() => {
-        console.log("로그아웃 성공");
         reset({
           index: 0,
           routes: [
@@ -116,8 +114,13 @@ export default function QnA({ navigation: { setOptions, reset } }) {
       setOptions({
         headerRight: () => {
           return (
-            <TouchableOpacity style={{ marginRight: 10 }} onPress={!authService.currentUser ? Login : logout}>
-              <LogoutText style={{ color: "#312070" }}>{!authService.currentUser ? "로그인" : "로그아웃"}</LogoutText>
+            <TouchableOpacity
+              style={{ marginRight: 10 }}
+              onPress={!authService.currentUser ? Login : logout}
+            >
+              <LogoutText style={{ color: "#312070" }}>
+                {!authService.currentUser ? "로그인" : "로그아웃"}
+              </LogoutText>
             </TouchableOpacity>
           );
         },

@@ -1,11 +1,5 @@
 import styled from "@emotion/native";
-import {
-  ActivityIndicator,
-  RefreshControl,
-  Text,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { ActivityIndicator, RefreshControl } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { authService, dbService } from "../../firebase";

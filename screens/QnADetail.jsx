@@ -1,5 +1,4 @@
 import QnACommentsList from "../components/QnADetail/QnACommentsList";
-// import QnACommentsList from "../components/QnADetail/QnACommentsList";
 import Post from "../components/Detail/Post";
 import QnACommentAddInput from "../components/QnADetail/QnACommentAddInput";
 import styled from "@emotion/native";
@@ -15,7 +14,7 @@ import {
   collection,
   doc,
   deleteDoc,
-  where
+  where,
 } from "firebase/firestore";
 import { dbService } from "../firebase";
 
@@ -110,7 +109,6 @@ export default function QnADetail({
       });
     }, [])
   );
-  // console.log(getPostId)
   return (
     <>
       <ScrollView>

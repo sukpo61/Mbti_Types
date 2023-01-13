@@ -42,38 +42,11 @@ export default function QnAComment({ comment }) {
   // 댓글 삭제하기
   const deleteComment = async (id) => {
     deleteDoc(doc(dbService, "qnaComments", id));
-    // const test = Alert.alert("댓글 삭제", "댓글을 정말 삭제하시겠습니다?", [
-    //   {
-    //     text: "취소",
-    //     style: "cancel",
-    //     onPress: () => {
-    //       setIsOpenModal(false);
-    //     },
-    //   },
-    //   {
-    //     text: "삭제",
-    //     style: "destructive",
-    //     onPress: () => {
-    //       setIsOpenModal(false);
-    //       deleteDoc(doc(dbService, "communityComments", id));
-    //       return "delete";
-    //     },
-    //   },
-    // ]);
-    // console.log(test)
-    // if (test === 'delete') {
-    //   deleteDoc(doc(dbService, "communityComments", id));
-    // }
   };
 
-  // FIXME: 왜 삭제만 실시간 업데이트가 안 될까???
   const deleteMutate = useMutation(deleteComment, {
     onSuccess: () => {
-      // setIsOpenModal(false);
       queryClient.invalidateQueries("qnaComments");
-      // refetch()
-      // onRefresh()
-      // queryClient.refetchQueries("communityComments");
     },
   });
 
@@ -105,7 +78,6 @@ export default function QnAComment({ comment }) {
                 <Feather name="edit" size={22} color="black" />
                 <ToggleText>댓글 수정</ToggleText>
               </EditDeleteBtn>
-              {/* <EditDeleteBtn onPress={() => deleteMutate(comment.id,{onSuccess: () => queryClient.invalidateQueries("communityComments")})}> */}
               <EditDeleteBtn onPress={() => deleteMutate.mutate(comment.id)}>
                 <FontAwesome name="trash-o" size={25} color="black" />
                 <ToggleText style={{ paddingLeft: 12 }}>댓글 삭제</ToggleText>
@@ -171,30 +143,16 @@ const CommentText = styled.Text`
 `;
 
 const EditInput = styled.TextInput`
+  width: 100%;
   border-bottom-color: gray;
   border-bottom-width: 1px;
-  font-size: 20px;
-  padding: 0 10px;
-  margin: 0 5px;
+  font-size: 14px;
+  padding: 0 2px;
 `;
 
 const ToggleBtn = styled.TouchableOpacity`
   position: absolute;
   right: 0;
-`;
-
-const ToggleBox = styled.View`
-  height: 65px;
-  width: 100px;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  right: 7px;
-  top: 25px;
-  z-index: 1;
-  background-color: white;
-  border: 0.5px solid lightgray;
 `;
 
 const ToggleText = styled.Text`

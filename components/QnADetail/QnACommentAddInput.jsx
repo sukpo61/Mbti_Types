@@ -63,7 +63,6 @@ export default function QnACommentAddInput({ getPost }) {
 const CommentAddContainer = styled.View`
   height: 60px;
   width: 100%;
-  /* position: fixed; */
   background-color: #fafafa;
   display: flex;
   justify-content: center;

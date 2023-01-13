@@ -23,26 +23,18 @@ export default function ComuPosts({ children }) {
   const [postlist, setPostlist] = useState([]);
 
   useEffect(() => {
-    console.log("ScrollY is ", ScrollY); // ScrollY가 변화할때마다 값을 콘솔에 출력
-  }, [ScrollY]);
-
-  useEffect(() => {
     getPostlist();
   }, []);
 
   const getPostlist = () => {
-    const q = query(
-      collection(dbService, "posts"),
-      orderBy("date", "desc") // 해당 collection 내의 docs들을 createdAt 속성을 내림차순 기준으로
-    );
+    const q = query(collection(dbService, "posts"), orderBy("date", "desc"));
 
     const array = [];
     onSnapshot(q, (snapshot) => {
-      // q (쿼리)안에 담긴 collection 내의 변화가 생길 때 마다 매번 실행됨
       snapshot.docs.map((doc) =>
         array.push({
           id: doc.id,
-          ...doc.data(), // doc.data() : { text, createdAt, ...  }
+          ...doc.data(),
         })
       );
       setPostlist(array);
@@ -105,8 +97,6 @@ const Wrap = styled.View`
   justify-content: center;
 `;
 const QnABtn = styled.View`
-  /* height: 23px;
-  width: 65px; */
   height: 18px;
   width: 50px;
   background-color: #696969;
@@ -114,7 +104,6 @@ const QnABtn = styled.View`
   margin-right: 5px;
   justify-content: center;
   align-items: center;
-  //추가
   position: absolute;
   right: 0;
 `;

@@ -28,29 +28,6 @@ export default function CommunityDetail({
   const [posts, setPosts] = useState([]);
   const { navigate } = useNavigation();
 
-  // useEffect(() => {
-  //   getposts();
-  // }, []);
-
-  // 포스트 불러오기
-  // const getposts = () => {
-  //   const q = query(
-  //     collection(dbService, "posts"),
-  //     where("category", "==", "community")
-  //   );
-  //   onSnapshot(q, (snapshot) => {
-  //     const posts = snapshot.docs.map((doc) => {
-  //       const newState = {
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       };
-  //       return newState;
-  //     });
-  //     setPosts(posts);
-  //   });
-  // };
-
-  // 본문 삭제하기.
   const deletePost = () => {
     Alert.alert("게시물 삭제", "정말 삭제 하시겠습니까?", [
       {
@@ -89,7 +66,6 @@ export default function CommunityDetail({
   // 로그인 여부에 따라 헤더 우측에 본문 수정, 삭제 아이콘 띄움.
   useFocusEffect(
     useCallback(() => {
-      console.log("useFocusEffect");
       setOptions({
         headerRight: () => {
           return (
@@ -110,7 +86,6 @@ export default function CommunityDetail({
       });
     }, [])
   );
-  // console.log(getPostId)
   return (
     <>
       <ScrollView>

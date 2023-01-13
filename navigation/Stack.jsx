@@ -26,7 +26,6 @@ export default function Stack({
       // 로그아웃 요청
       signOut(authService)
         .then(() => {
-          console.log("로그아웃 성공");
           setOptions({ headerRight: null });
         })
         .catch((err) => alert(err));
