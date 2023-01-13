@@ -78,7 +78,6 @@ const TitleWrap = styled.View`
 
 const TitleText = styled.Text`
   font-size: 24px;
-  line-height: 33px;
 
   color: #584164;
 `;

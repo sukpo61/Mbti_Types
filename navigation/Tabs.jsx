@@ -24,9 +24,8 @@ export default function Tabs() {
         headerTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarActiveTintColor: isDark ? YELLOW_COLOR : GREEN_COLOR,
         tabBarLabelPosition: "below-icon",
-        tabBarLabelPosition: "below-icon",
-        headerTitle: "",
         headerTitleAlign: "center",
+        headerTitleStyle: { fontSize: 16 },
         headerStyle: { backgroundColor: "#EFE8FA" },
         tabBarStyle: { backgroundColor: "#EFE8FA" },
         headerShadowVisible: false,
@@ -35,6 +34,7 @@ export default function Tabs() {
     >
       <Tab.Screen
         options={{
+          headerTitle: "QnA",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="comment-question-outline"
@@ -48,6 +48,7 @@ export default function Tabs() {
       />
       <Tab.Screen
         options={{
+          headerTitle: "Community",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" size={size} color={color} />
           ),
@@ -57,6 +58,7 @@ export default function Tabs() {
       />
       <Tab.Screen
         options={{
+          headerTitle: "My",
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="user" size={size} color={color} />
           ),

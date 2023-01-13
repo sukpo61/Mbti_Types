@@ -137,8 +137,7 @@ const QnaBtn = styled.View`
 
 const QnAText = styled.Text`
   color: white;
-  line-height: 23px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   padding-left: 2px;
 `;

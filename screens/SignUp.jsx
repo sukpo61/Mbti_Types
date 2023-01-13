@@ -46,7 +46,7 @@ const ButtonsWrap = styled.View`
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  margin-top: 120px;
+  margin-top: 144px;
 `;
 
 const LoginText = styled.Text`
@@ -92,7 +92,6 @@ const TitleWrap = styled.View`
 
 const TitleText = styled.Text`
   font-size: 24px;
-  line-height: 33px;
   color: #584164;
 `;
 
