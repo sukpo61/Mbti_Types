@@ -124,7 +124,11 @@ export default function Post({ getPost }) {
             <StyledTitle>{post?.title}</StyledTitle>
             {getPost.category === "community" ? (
               <MbtiColorBtnCommunity mbti={post?.mbti} />
-            ) : null}
+            ) : (
+              <QnaBtn>
+                <QnAText>QnA</QnAText>
+              </QnaBtn>
+            )}
           </TitleMbtiBox>
           <NameDateBox>
             <StyledNickName>{post?.nickname}</StyledNickName>
@@ -155,6 +159,25 @@ export default function Post({ getPost }) {
     </>
   );
 }
+
+const QnaBtn = styled.View`
+  height: 23px;
+  width: 65px;
+  background-color: #696969;
+  border-radius: 20px;
+  margin-right: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+const QnAText = styled.Text`
+  color: white;
+  line-height: 23px;
+  font-size: 18px;
+  font-weight: bold;
+  padding-left: 2px;
+`;
 
 const LikeButtonWrap = styled.View`
   width: 100%;
