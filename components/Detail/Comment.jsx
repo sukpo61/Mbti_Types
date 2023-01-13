@@ -117,6 +117,7 @@ export default function Comment({ comment }) {
       <InfoMiddle>
         {isEdit ? (
           <EditInput
+            multiline={true}
             autoFocus
             onSubmitEditing={() => editMutate(comment.id)}
             onChangeText={setEditContent}
@@ -172,11 +173,11 @@ const CommentText = styled.Text`
 `;
 
 const EditInput = styled.TextInput`
+  width: 100%;
   border-bottom-color: gray;
   border-bottom-width: 1px;
-  font-size: 20px;
-  padding: 0 10px;
-  margin: 0 5px;
+  font-size: 14px;
+  padding: 0 2px;
 `;
 
 const ToggleBtn = styled.TouchableOpacity`

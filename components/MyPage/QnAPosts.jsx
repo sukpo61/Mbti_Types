@@ -58,7 +58,10 @@ export default function ComuPosts({ children }) {
                 <PostBox
                   onPress={() =>
                     navigate("Stack", {
-                      screen: "CommunityDetail",
+                      screen:
+                        post.community === "community"
+                          ? "CommunityDetail"
+                          : "QnADetail",
                       params: { getPost: post },
                     })
                   }
